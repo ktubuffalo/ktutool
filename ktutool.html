@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<!-- saved from url=(0080)file:///C:/Users/Kitchen%20Tune-Up/Downloads/cabinet_door_field_tool%20(13).html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KTU-Bflo Door &amp; Drawer Calculator</title>
+<style>
+:root {
+--bg: #f3f4f6;
+--card: #ffffff;
+--text: #2f2f2f;
+--muted: #6b7280;
+--line: #d1d5db;
+--accent: #f26a21;
+--accent-dark: #c54f12;
+--accent-soft: #fff3eb;
+--good: #f26a21;
+--warn: #9a3412;
+--warn-bg: #fff7ed;
+--brand-grey: #4b5563;
+--brand-dark: #2f2f2f;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: var(--bg); color: var(--text); }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 16px; }
+.topbar { margin-bottom: 16px; background: linear-gradient(135deg, var(--brand-dark), var(--brand-grey)); color: white; border-radius: 20px; padding: 18px; border-left: 8px solid var(--accent); box-shadow: 0 5px 18px rgba(0,0,0,0.12); }
+.brand-row { display: flex; align-items: center; gap: 14px; }
+.brand-mark { width: 54px; height: 54px; border-radius: 14px; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; line-height: 1; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.25); }
+.brand-text { min-width: 0; }
+.brand-kicker { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #fed7aa; font-weight: bold; margin-bottom: 3px; }
+h1 { margin: 0 0 6px; font-size: 28px; line-height: 1.2; }
+.lead { margin: 0; color: #e5e7eb; line-height: 1.4; font-size: 14px; }
+.layout { display: grid; grid-template-columns: 1.5fr 0.8fr; gap: 16px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+.section-title { margin: 0 0 12px; font-size: 18px; }
+.action-row, .order-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.action-row { margin-bottom: 14px; }
+button { border: 1px solid var(--line); background: white; color: var(--text); padding: 10px 14px; border-radius: 12px; font-size: 14px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+button.primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+.grid, .advanced-grid, .mini-grid { display: grid; gap: 12px; }
+.grid, .advanced-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.mini-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 12px; gap: 10px; }
+label { display: block; font-size: 12px; font-weight: bold; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.03em; text-transform: uppercase; }
+input, select, textarea { width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 12px; font-size: 16px; background: white; font-family: inherit; }
+.result-panel { background: var(--accent-soft); border: 1px solid #fed7aa; border-radius: 16px; padding: 14px; margin-bottom: 12px; }
+.result-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+.big { font-size: 30px; font-weight: bold; color: var(--good); line-height: 1.2; }
+.sub { font-size: 14px; color: var(--muted); margin-top: 4px; }
+.summary { border: 1px dashed var(--line); border-radius: 14px; padding: 12px; background: #fafafa; font-size: 14px; line-height: 1.5; }
+.rule-box { border: 1px solid #fed7aa; background: var(--warn-bg); color: var(--warn); border-radius: 14px; padding: 12px; font-size: 14px; line-height: 1.5; margin-bottom: 12px; }
+.mini-box { border: 1px solid var(--line); border-radius: 12px; padding: 10px; background: white; }
+.mini-box .k { font-size: 11px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.mini-box .v { font-size: 18px; font-weight: bold; }
+.help, .advanced-note { margin-top: 12px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+.advanced-box { margin-top: 14px; border: 1px solid var(--line); border-radius: 14px; padding: 12px; background: #fafafa; }
+.test-box { margin-top: 12px; border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: white; font-size: 13px; line-height: 1.5; color: var(--muted); white-space: pre-wrap; }
+.order-sheet { margin-top: 16px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: white; }
+.sheet-header, .order-sheet-header { padding: 12px 14px; border-bottom: 1px solid var(--line); background: #f9fafb; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.sheet-content { padding: 16px; line-height: 1.6; font-size: 14px; }
+.order-table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+th { background: #f9fafb; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.empty-state { padding: 16px; color: var(--muted); font-size: 14px; }
+.pill-count { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 12px; font-weight: bold; }
+#printCanvas { display: none; }
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 1000; }
+.modal-backdrop.open { display: flex; }
+.modal-card { width: min(760px, 100%); background: white; border-radius: 18px; border: 1px solid var(--line); box-shadow: 0 10px 30px rgba(0,0,0,0.15); padding: 16px; }
+.modal-card h3 { margin: 0 0 8px; font-size: 20px; }
+.modal-card p { margin: 0 0 12px; color: var(--muted); line-height: 1.5; font-size: 14px; }
+.copy-box { min-height: 240px; resize: vertical; font-size: 14px; line-height: 1.5; white-space: pre; }
+@media print {
+@page { margin: 0.35in; }
+html, body { margin: 0 !important; padding: 0 !important; background: white !important; height: auto !important; }
+.wrap, .modal-backdrop { display: none !important; }
+#printCanvas, #printCanvas * { visibility: visible !important; }
+#printCanvas { display: block !important; position: static !important; width: 100% !important; padding: 0 !important; margin: 0 !important; background: white !important; color: black !important; }
+.print-page { page-break-after: auto !important; break-after: auto !important; margin: 0 !important; padding: 0 !important; }
+.print-header { display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #f26a21; padding-bottom: 10px; margin-bottom: 14px; }
+.print-mark { width: 42px; height: 42px; background: #f26a21; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; border-radius: 6px; }
+.print-sub { font-size: 16px; font-weight: bold; color: #2f2f2f; }
+.print-title-main { font-size: 12px; color: #4b5563; margin-top: 2px; }
+.print-title { font-size: 20px; font-weight: bold; margin: 0 0 10px; }
+.print-meta { font-size: 13px; line-height: 1.4; margin-bottom: 14px; }
+.print-table { width: 100%; border-collapse: collapse; font-size: 11px; page-break-inside: auto; }
+.print-table tr { page-break-inside: avoid; break-inside: avoid; }
+.print-table th, .print-table td { border: 1px solid #000; padding: 5px; }
+}
+@media (max-width: 860px) { .layout, .grid, .advanced-grid, .mini-grid { grid-template-columns: 1fr; } h1 { font-size: 24px; } .big { font-size: 26px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="topbar">
+<div class="brand-row">
+<div class="brand-mark">KTU</div>
+<div class="brand-text">
+<div class="brand-kicker">Kitchen Tune-Up Buffalo</div>
+<h1>KTU-Bflo Door &amp; Drawer Calculator</h1>
+<p class="lead">Enter the opening size, overlays, and gap. Doors and drawers can auto split at 20.5 inches wide or be forced to 1 or 2 fronts. Panels use exact sizes.</p>
+</div>
+</div>
+</div>
+<div class="layout">
+<div class="card">
+<h2 class="section-title">1. Job Inputs</h2>
+<div class="grid">
+<div><label for="doorIdentifier">Door Identifier</label><input id="doorIdentifier" type="text" placeholder="Example: B12 or Sink Base Left" oninput="calculate()"></div>
+<div><label for="frontType">Front Type</label><select id="frontType" onchange="handleFrontTypeChange()"><option value="door">Door</option><option value="drawer">Drawer</option><option value="panel_1_4">1/4" Panel</option><option value="panel_3_4">3/4" Panel</option><option value="misc">Misc.</option></select></div>
+<div><label for="openingWidth">A: Opening Width</label><input id="openingWidth" type="number" step="0.01" value="15" oninput="calculate()"></div>
+<div><label for="doorSplitMode">Width Split Rule</label><select id="doorSplitMode" onchange="calculate()"><option value="auto" selected="">Auto</option><option value="force_single">Force 1</option><option value="force_double">Force 2</option></select></div>
+<div id="drawerHeightSplitWrap" style="display: none;"><label for="drawerHeightSplitMode">Drawer Height Split Rule</label><select id="drawerHeightSplitMode" onchange="calculate()"><option value="auto" selected="">Auto</option><option value="force_single">Force 1</option><option value="force_double">Force 2</option></select></div>
+<div><label for="hingePlacement">Hinge Placement</label><select id="hingePlacement" onchange="calculate()"><option value="L">L</option><option value="R">R</option><option value="B">B</option><option value="NB">NB (No Bore)</option></select></div>
+<div><label for="openingHeight">B: Opening Height</label><input id="openingHeight" type="number" step="0.01" value="30" oninput="calculate()"></div>
+<div id="panelWidthWrap" style="display: none;"><label for="panelWidth">Panel Width</label><input id="panelWidth" type="number" step="0.01" value="0" oninput="calculate()"></div>
+<div id="panelHeightWrap" style="display: none;"><label for="panelHeight">Panel Height</label><input id="panelHeight" type="number" step="0.01" value="0" oninput="calculate()"></div>
+<div id="miscDescriptionWrap" style="display: none;"><label for="miscDescription">Misc. Description</label><input id="miscDescription" type="text" placeholder="Example: Skin panel, filler, molding" oninput="calculate()"></div>
+<div id="miscAmountWrap" style="display: none;"><label for="miscAmount">Misc. Amount Needed</label><input id="miscAmount" type="text" placeholder="Example: 2 pcs, 8 ft, 1 sheet" oninput="calculate()"></div>
+<div><label for="gap">D: Gap</label><input id="gap" type="number" step="0.01" value="0.125" oninput="calculate()"></div>
+<div><label for="overlay">C: Overlay Average</label><input id="overlay" type="number" step="0.01" value="0.5" oninput="syncAdvancedOverlayFields(this.value); calculate()"></div>
+<div><label for="rounding">Rounding</label><select id="rounding" onchange="calculate()"><option value="none">No rounding</option><option value="0.0625">Nearest 1/16</option><option value="0.125">Nearest 1/8</option><option value="0.25">Nearest 1/4</option></select></div>
+<div><label for="jobName">Job / Customer Name</label><input id="jobName" type="text" placeholder="Optional" oninput="calculate(); renderCoverSheet(); renderPrintCanvas()"></div>
+<div><label for="doorStyle">Door Style</label><input id="doorStyle" type="text" placeholder="Example: Shaker" oninput="calculate(); renderCoverSheet(); renderPrintCanvas()"></div>
+<div><label for="species">Species</label><select id="species" onchange="calculate(); renderCoverSheet(); renderPrintCanvas()"><option value="">Select Species</option><option value="Maple">Maple</option><option value="Oak">Oak</option><option value="Cherry">Cherry</option><option value="Alder">Alder</option><option value="Knotty Alder">Knotty Alder</option><option value="Knotty Cherry">Knotty Cherry</option><option value="White Oak">White Oak</option><option value="Walnut">Walnut</option><option value="Thermofoil">Thermofoil</option></select></div>
+<div><label for="finishColor">Finish / Color</label><input id="finishColor" type="text" placeholder="Example: Painted White" oninput="calculate(); renderCoverSheet(); renderPrintCanvas()"></div>
+</div>
+<div class="advanced-box">
+<div class="advanced-grid">
+<div><label for="overlayTop">Top Overlay</label><select id="overlayTop" onchange="handleOverlayChange()"><option value="0.0625">1/16 Overlay</option><option value="0.125">1/8 Overlay</option><option value="0.1875">3/16 Overlay</option><option value="0.25">1/4 Overlay</option><option value="0.3125">5/16 Overlay</option><option value="0.375">3/8 Overlay</option><option value="0.4375">7/16 Overlay</option><option value="0.5">1/2 Overlay</option><option value="0.5625">9/16 Overlay</option><option value="0.625">5/8 Overlay</option><option value="0.6875">11/16 Overlay</option><option value="0.75">3/4 Overlay</option><option value="0.8125">13/16 Overlay</option><option value="0.875">7/8 Overlay</option><option value="0.9375">15/16 Overlay</option><option value="1">1 Overlay</option><option value="1.0625">1 1/16 Overlay</option><option value="1.125">1 1/8 Overlay</option><option value="1.1875">1 3/16 Overlay</option><option value="1.25">1 1/4 Overlay</option><option value="1.3125">1 5/16 Overlay</option><option value="1.375">1 3/8 Overlay</option><option value="1.4375">1 7/16 Overlay</option><option value="1.5">1 1/2 Overlay</option><option value="1.5625">1 9/16 Overlay</option><option value="1.625">1 5/8 Overlay</option><option value="1.6875">1 11/16 Overlay</option><option value="1.75">1 3/4 Overlay</option><option value="1.8125">1 13/16 Overlay</option><option value="1.875">1 7/8 Overlay</option><option value="1.9375">1 15/16 Overlay</option><option value="2">2 Overlay</option><option value="2.0625">2 1/16 Overlay</option><option value="2.125">2 1/8 Overlay</option><option value="2.1875">2 3/16 Overlay</option><option value="2.25">2 1/4 Overlay</option><option value="2.3125">2 5/16 Overlay</option><option value="2.375">2 3/8 Overlay</option><option value="2.4375">2 7/16 Overlay</option><option value="2.5">2 1/2 Overlay</option><option value="2.5625">2 9/16 Overlay</option><option value="2.625">2 5/8 Overlay</option><option value="2.6875">2 11/16 Overlay</option><option value="2.75">2 3/4 Overlay</option><option value="2.8125">2 13/16 Overlay</option><option value="2.875">2 7/8 Overlay</option><option value="2.9375">2 15/16 Overlay</option><option value="3">3 Overlay</option><option value="3.0625">3 1/16 Overlay</option><option value="3.125">3 1/8 Overlay</option><option value="3.1875">3 3/16 Overlay</option><option value="3.25">3 1/4 Overlay</option><option value="3.3125">3 5/16 Overlay</option><option value="3.375">3 3/8 Overlay</option><option value="3.4375">3 7/16 Overlay</option><option value="3.5">3 1/2 Overlay</option><option value="3.5625">3 9/16 Overlay</option><option value="3.625">3 5/8 Overlay</option><option value="3.6875">3 11/16 Overlay</option><option value="3.75">3 3/4 Overlay</option><option value="3.8125">3 13/16 Overlay</option><option value="3.875">3 7/8 Overlay</option><option value="3.9375">3 15/16 Overlay</option><option value="4">4 Overlay</option></select></div>
+<div><label for="overlayBottom">Bottom Overlay</label><select id="overlayBottom" onchange="handleOverlayChange()"><option value="0.0625">1/16 Overlay</option><option value="0.125">1/8 Overlay</option><option value="0.1875">3/16 Overlay</option><option value="0.25">1/4 Overlay</option><option value="0.3125">5/16 Overlay</option><option value="0.375">3/8 Overlay</option><option value="0.4375">7/16 Overlay</option><option value="0.5">1/2 Overlay</option><option value="0.5625">9/16 Overlay</option><option value="0.625">5/8 Overlay</option><option value="0.6875">11/16 Overlay</option><option value="0.75">3/4 Overlay</option><option value="0.8125">13/16 Overlay</option><option value="0.875">7/8 Overlay</option><option value="0.9375">15/16 Overlay</option><option value="1">1 Overlay</option><option value="1.0625">1 1/16 Overlay</option><option value="1.125">1 1/8 Overlay</option><option value="1.1875">1 3/16 Overlay</option><option value="1.25">1 1/4 Overlay</option><option value="1.3125">1 5/16 Overlay</option><option value="1.375">1 3/8 Overlay</option><option value="1.4375">1 7/16 Overlay</option><option value="1.5">1 1/2 Overlay</option><option value="1.5625">1 9/16 Overlay</option><option value="1.625">1 5/8 Overlay</option><option value="1.6875">1 11/16 Overlay</option><option value="1.75">1 3/4 Overlay</option><option value="1.8125">1 13/16 Overlay</option><option value="1.875">1 7/8 Overlay</option><option value="1.9375">1 15/16 Overlay</option><option value="2">2 Overlay</option><option value="2.0625">2 1/16 Overlay</option><option value="2.125">2 1/8 Overlay</option><option value="2.1875">2 3/16 Overlay</option><option value="2.25">2 1/4 Overlay</option><option value="2.3125">2 5/16 Overlay</option><option value="2.375">2 3/8 Overlay</option><option value="2.4375">2 7/16 Overlay</option><option value="2.5">2 1/2 Overlay</option><option value="2.5625">2 9/16 Overlay</option><option value="2.625">2 5/8 Overlay</option><option value="2.6875">2 11/16 Overlay</option><option value="2.75">2 3/4 Overlay</option><option value="2.8125">2 13/16 Overlay</option><option value="2.875">2 7/8 Overlay</option><option value="2.9375">2 15/16 Overlay</option><option value="3">3 Overlay</option><option value="3.0625">3 1/16 Overlay</option><option value="3.125">3 1/8 Overlay</option><option value="3.1875">3 3/16 Overlay</option><option value="3.25">3 1/4 Overlay</option><option value="3.3125">3 5/16 Overlay</option><option value="3.375">3 3/8 Overlay</option><option value="3.4375">3 7/16 Overlay</option><option value="3.5">3 1/2 Overlay</option><option value="3.5625">3 9/16 Overlay</option><option value="3.625">3 5/8 Overlay</option><option value="3.6875">3 11/16 Overlay</option><option value="3.75">3 3/4 Overlay</option><option value="3.8125">3 13/16 Overlay</option><option value="3.875">3 7/8 Overlay</option><option value="3.9375">3 15/16 Overlay</option><option value="4">4 Overlay</option></select></div>
+<div><label for="overlayLeft">Left Overlay</label><select id="overlayLeft" onchange="handleOverlayChange()"><option value="-0.875">-7/8 (Reduce)</option><option value="0.0625">1/16 Overlay</option><option value="0.125">1/8 Overlay</option><option value="0.1875">3/16 Overlay</option><option value="0.25">1/4 Overlay</option><option value="0.3125">5/16 Overlay</option><option value="0.375">3/8 Overlay</option><option value="0.4375">7/16 Overlay</option><option value="0.5">1/2 Overlay</option><option value="0.5625">9/16 Overlay</option><option value="0.625">5/8 Overlay</option><option value="0.6875">11/16 Overlay</option><option value="0.75">3/4 Overlay</option><option value="0.8125">13/16 Overlay</option><option value="0.875">7/8 Overlay</option><option value="0.9375">15/16 Overlay</option><option value="1">1 Overlay</option><option value="1.0625">1 1/16 Overlay</option><option value="1.125">1 1/8 Overlay</option><option value="1.1875">1 3/16 Overlay</option><option value="1.25">1 1/4 Overlay</option><option value="1.3125">1 5/16 Overlay</option><option value="1.375">1 3/8 Overlay</option><option value="1.4375">1 7/16 Overlay</option><option value="1.5">1 1/2 Overlay</option><option value="1.5625">1 9/16 Overlay</option><option value="1.625">1 5/8 Overlay</option><option value="1.6875">1 11/16 Overlay</option><option value="1.75">1 3/4 Overlay</option><option value="1.8125">1 13/16 Overlay</option><option value="1.875">1 7/8 Overlay</option><option value="1.9375">1 15/16 Overlay</option><option value="2">2 Overlay</option><option value="2.0625">2 1/16 Overlay</option><option value="2.125">2 1/8 Overlay</option><option value="2.1875">2 3/16 Overlay</option><option value="2.25">2 1/4 Overlay</option><option value="2.3125">2 5/16 Overlay</option><option value="2.375">2 3/8 Overlay</option><option value="2.4375">2 7/16 Overlay</option><option value="2.5">2 1/2 Overlay</option><option value="2.5625">2 9/16 Overlay</option><option value="2.625">2 5/8 Overlay</option><option value="2.6875">2 11/16 Overlay</option><option value="2.75">2 3/4 Overlay</option><option value="2.8125">2 13/16 Overlay</option><option value="2.875">2 7/8 Overlay</option><option value="2.9375">2 15/16 Overlay</option><option value="3">3 Overlay</option><option value="3.0625">3 1/16 Overlay</option><option value="3.125">3 1/8 Overlay</option><option value="3.1875">3 3/16 Overlay</option><option value="3.25">3 1/4 Overlay</option><option value="3.3125">3 5/16 Overlay</option><option value="3.375">3 3/8 Overlay</option><option value="3.4375">3 7/16 Overlay</option><option value="3.5">3 1/2 Overlay</option><option value="3.5625">3 9/16 Overlay</option><option value="3.625">3 5/8 Overlay</option><option value="3.6875">3 11/16 Overlay</option><option value="3.75">3 3/4 Overlay</option><option value="3.8125">3 13/16 Overlay</option><option value="3.875">3 7/8 Overlay</option><option value="3.9375">3 15/16 Overlay</option><option value="4">4 Overlay</option></select></div>
+<div><label for="overlayRight">Right Overlay</label><select id="overlayRight" onchange="handleOverlayChange()"><option value="-0.875">-7/8 (Reduce)</option><option value="0.0625">1/16 Overlay</option><option value="0.125">1/8 Overlay</option><option value="0.1875">3/16 Overlay</option><option value="0.25">1/4 Overlay</option><option value="0.3125">5/16 Overlay</option><option value="0.375">3/8 Overlay</option><option value="0.4375">7/16 Overlay</option><option value="0.5">1/2 Overlay</option><option value="0.5625">9/16 Overlay</option><option value="0.625">5/8 Overlay</option><option value="0.6875">11/16 Overlay</option><option value="0.75">3/4 Overlay</option><option value="0.8125">13/16 Overlay</option><option value="0.875">7/8 Overlay</option><option value="0.9375">15/16 Overlay</option><option value="1">1 Overlay</option><option value="1.0625">1 1/16 Overlay</option><option value="1.125">1 1/8 Overlay</option><option value="1.1875">1 3/16 Overlay</option><option value="1.25">1 1/4 Overlay</option><option value="1.3125">1 5/16 Overlay</option><option value="1.375">1 3/8 Overlay</option><option value="1.4375">1 7/16 Overlay</option><option value="1.5">1 1/2 Overlay</option><option value="1.5625">1 9/16 Overlay</option><option value="1.625">1 5/8 Overlay</option><option value="1.6875">1 11/16 Overlay</option><option value="1.75">1 3/4 Overlay</option><option value="1.8125">1 13/16 Overlay</option><option value="1.875">1 7/8 Overlay</option><option value="1.9375">1 15/16 Overlay</option><option value="2">2 Overlay</option><option value="2.0625">2 1/16 Overlay</option><option value="2.125">2 1/8 Overlay</option><option value="2.1875">2 3/16 Overlay</option><option value="2.25">2 1/4 Overlay</option><option value="2.3125">2 5/16 Overlay</option><option value="2.375">2 3/8 Overlay</option><option value="2.4375">2 7/16 Overlay</option><option value="2.5">2 1/2 Overlay</option><option value="2.5625">2 9/16 Overlay</option><option value="2.625">2 5/8 Overlay</option><option value="2.6875">2 11/16 Overlay</option><option value="2.75">2 3/4 Overlay</option><option value="2.8125">2 13/16 Overlay</option><option value="2.875">2 7/8 Overlay</option><option value="2.9375">2 15/16 Overlay</option><option value="3">3 Overlay</option><option value="3.0625">3 1/16 Overlay</option><option value="3.125">3 1/8 Overlay</option><option value="3.1875">3 3/16 Overlay</option><option value="3.25">3 1/4 Overlay</option><option value="3.3125">3 5/16 Overlay</option><option value="3.375">3 3/8 Overlay</option><option value="3.4375">3 7/16 Overlay</option><option value="3.5">3 1/2 Overlay</option><option value="3.5625">3 9/16 Overlay</option><option value="3.625">3 5/8 Overlay</option><option value="3.6875">3 11/16 Overlay</option><option value="3.75">3 3/4 Overlay</option><option value="3.8125">3 13/16 Overlay</option><option value="3.875">3 7/8 Overlay</option><option value="3.9375">3 15/16 Overlay</option><option value="4">4 Overlay</option></select></div>
+</div>
+<div class="advanced-note">Advanced overlay mode is always active. Overlay dropdowns use 1/16-inch steps up to 4 inches. Left and right also include a -7/8 reduce option.</div>
+</div>
+<div class="help"><strong>Formula used</strong><br>Width = opening width + left overlay + right overlay<br>Height = opening height + top overlay + bottom overlay<br>Auto split uses 2 fronts when opening width is 20.5 or larger. Force 1 and Force 2 override auto.</div>
+<div class="test-box" id="testResults">PASS - 20.49 opening stays single (expected false, got false)
+PASS - 20.5 opening splits (expected true, got true)
+PASS - double width formula (expected 10.6875, got 10.6875)
+PASS - double door can save NB (expected No Bore, got No Bore)
+PASS - drawer auto width split works (expected true, got true)
+PASS - drawer height force double works (expected true, got true)
+PASS - drawer height split quantity is 2 (expected 2, got 2)
+FAIL - drawer height split formula uses 1/4 gap (expected 10.4375, got 10.375)
+PASS - panel label (expected 1/4 Panel, got 1/4 Panel)
+PASS - misc amount stored (expected 8 ft, got 8 ft)
+PASS - 11/16 fraction (expected 11/16, got 11/16)
+PASS - overlay options include 4 inches (expected true, got true)
+PASS - overlay options include 1/16 (expected true, got true)
+PASS - scheduleAutoSave exists (expected function, got function)
+PASS - backupLibrary exists (expected function, got function)
+PASS - library renderer exists (expected function, got function)</div>
+</div>
+<div class="card">
+<h2 class="section-title">2. Finished Front Size</h2>
+<div class="rule-box" id="autoRuleMessage">Door selected. This uses 1 door.</div>
+<div class="result-panel"><div class="result-label">E: Front Width</div><div class="big" id="doorWidthDisplay">16</div><div class="sub" id="doorWidthNote">Finished width</div></div>
+<div class="result-panel"><div class="result-label">F: Front Height</div><div class="big" id="doorHeightDisplay">31</div><div class="sub">Finished height</div></div>
+<div class="summary" id="summaryText"><strong>Front type:</strong> Door<br><strong>Hinge placement:</strong> L<br><strong>Opening:</strong> 15 W x 30 H<br><strong>Width split rule:</strong> auto<br><strong>Overlays:</strong> Top 0.5, Bottom 0.5, Left 0.5, Right 0.5<br><strong>Result:</strong> Order 1 door at 16 W x 31 H.</div>
+<div class="mini-grid"><div class="mini-box"><div class="k">Front Type</div><div class="v" id="doorTypeDisplay">Door</div></div></div>
+<div class="action-row" style="margin-top: 10px;"><button class="primary" type="button" onclick="addCurrentToOrderSheet()">Add to Order Sheet</button><button type="button" onclick="printSheets()">Print Cover + Order Sheets</button><button type="button" onclick="copyResults()">Copy Results</button></div>
+<div class="order-sheet"><div class="sheet-header"><div><strong>Cover Sheet</strong></div><div class="order-actions"><button type="button" onclick="copyCoverSheet()">Copy Cover Sheet</button></div></div><div class="sheet-content" id="coverSheetDisplay">No cover sheet details entered yet.</div></div>
+<div class="order-sheet">
+<div class="order-sheet-header"><div><strong>Saved Jobs Library</strong> <span class="pill-count" id="savedJobCount">26</span><div id="autoSaveStatus" style="font-size:12px; color:var(--muted); margin-top:4px;">Auto-saved draft at 3:23:04 PM</div></div><div class="order-actions"><button type="button" onclick="saveCurrentJobToLibrary()">Save New Kitchen</button><button type="button" onclick="updateCurrentSavedJob()">Update Loaded Kitchen</button><button type="button" onclick="startNewKitchen()">Start New Kitchen</button><button type="button" onclick="exportSavedJobs()">Export Library</button><button type="button" onclick="backupLibrary()">Backup (Download)</button><button type="button" onclick="triggerImport()">Restore (Import)</button><input id="importFileInput" type="file" accept="application/json" style="display:none;"></div></div>
+<div class="sheet-content"><div class="grid" style="margin-bottom:12px;"><div><label for="savedJobName">Saved Job Name</label><input id="savedJobName" type="text" placeholder="Example: Smith Kitchen Phase 1" oninput="renderSavedJobsLibrary(); scheduleAutoSave()"></div><div><label for="savedJobSearch">Search Saved Jobs</label><input id="savedJobSearch" type="text" placeholder="Search by customer, job, identifier" oninput="renderSavedJobsLibrary()"></div></div><div id="savedJobsEmpty" class="empty-state" style="display: block;">Showing the 5 most recently saved deals. Older saved deals are hidden from this list.</div><div class="order-table-wrap"><table><thead><tr><th>Saved Job</th><th>Customer</th><th>Items</th><th>Updated</th><th>Action</th></tr></thead><tbody id="savedJobsBody"><tr><td>Franjoine Kitchen</td><td>Franjoine</td><td>35</td><td>8/4/2026, 3:22:57 PM</td><td><button type="button" data-load-id="job_1785871377258_88324">Load</button> <button type="button" data-delete-id="job_1785871377258_88324">Delete</button></td></tr><tr><td>Roesgen Kitchen</td><td>Roesgen</td><td>31</td><td>7/22/2026, 7:41:08 PM</td><td><button type="button" data-load-id="job_1784763237811_876">Load</button> <button type="button" data-delete-id="job_1784763237811_876">Delete</button></td></tr><tr><td>Belica</td><td>Belica</td><td>31</td><td>7/22/2026, 6:32:43 PM</td><td><button type="button" data-load-id="job_1784759365177_36013">Load</button> <button type="button" data-delete-id="job_1784759365177_36013">Delete</button></td></tr><tr><td>Carosella LIW</td><td>Carosella LIW</td><td>4</td><td>7/21/2026, 9:20:34 AM</td><td><button type="button" data-load-id="job_1784639736696_40858">Load</button> <button type="button" data-delete-id="job_1784639736696_40858">Delete</button></td></tr><tr><td>Carosella Kitchen</td><td>Carosella</td><td>10</td><td>7/21/2026, 9:06:25 AM</td><td><button type="button" data-load-id="job_1784638904513_22527">Load</button> <button type="button" data-delete-id="job_1784638904513_22527">Delete</button></td></tr></tbody></table></div></div>
+</div>
+<div class="order-sheet">
+<div class="order-sheet-header"><div><strong>Order Sheet</strong> <span class="pill-count" id="orderCount">0</span></div><div class="order-actions"><button type="button" onclick="copyOrderSheet()">Copy Order Sheet</button><button type="button" onclick="clearOrderSheet()">Clear Order Sheet</button></div></div>
+<div class="order-table-wrap"><table><thead><tr><th>Identifier</th><th>Front Type</th><th>Description</th><th>Width</th><th>Height</th><th>Qty / Amount</th><th>Hinge</th><th>Overlay</th><th>Action</th></tr></thead><tbody id="orderSheetBody"></tbody></table><div class="empty-state" id="orderSheetEmpty" style="display: block;">No items added yet.</div></div>
+<div class="advanced-box" id="orderItemEditor" style="display: none; margin: 16px;">
+<h3 class="section-title" style="margin-top:0;">Edit Order Item</h3>
+<div class="advanced-grid">
+<div><label for="editIdentifier">Identifier</label><input id="editIdentifier" type="text"></div>
+<div><label for="editFrontType">Front Type</label><select id="editFrontType" onchange="handleEditFrontTypeChange()"><option value="door">Door</option><option value="drawer">Drawer</option><option value="panel_1_4">1/4" Panel</option><option value="panel_3_4">3/4" Panel</option><option value="misc">Misc.</option></select></div>
+<div><label for="editDoorSplitMode">Width Split Rule</label><select id="editDoorSplitMode"><option value="auto">Auto</option><option value="force_single">Force 1</option><option value="force_double">Force 2</option></select></div>
+<div id="editDrawerHeightSplitWrap" style="display:none;"><label for="editDrawerHeightSplitMode">Drawer Height Split Rule</label><select id="editDrawerHeightSplitMode"><option value="auto">Auto</option><option value="force_single">Force 1</option><option value="force_double">Force 2</option></select></div>
+<div><label for="editOpeningWidth">Opening Width</label><input id="editOpeningWidth" type="number" step="0.01"></div>
+<div><label for="editHingePlacement">Hinge Placement</label><select id="editHingePlacement"><option value="L">L</option><option value="R">R</option><option value="B">B</option><option value="NB">NB (No Bore)</option></select></div>
+<div><label for="editOpeningHeight">Opening Height</label><input id="editOpeningHeight" type="number" step="0.01"></div>
+<div id="editPanelWidthWrap" style="display:none;"><label for="editPanelWidth">Panel Width</label><input id="editPanelWidth" type="number" step="0.01"></div>
+<div id="editPanelHeightWrap" style="display:none;"><label for="editPanelHeight">Panel Height</label><input id="editPanelHeight" type="number" step="0.01"></div>
+<div id="editMiscDescriptionWrap" style="display:none;"><label for="editMiscDescription">Misc. Description</label><input id="editMiscDescription" type="text"></div>
+<div id="editMiscAmountWrap" style="display:none;"><label for="editMiscAmount">Misc. Amount Needed</label><input id="editMiscAmount" type="text"></div>
+<div><label for="editGap">Gap</label><input id="editGap" type="number" step="0.01"></div>
+<div><label for="editRounding">Rounding</label><select id="editRounding"><option value="none">No rounding</option><option value="0.0625">Nearest 1/16</option><option value="0.125">Nearest 1/8</option><option value="0.25">Nearest 1/4</option></select></div>
+<div><label for="editOverlayTop">Top Overlay</label><select id="editOverlayTop"><option value="0.0625">1/16 Overlay</option><option value="0.125">1/8 Overlay</option><option value="0.1875">3/16 Overlay</option><option value="0.25">1/4 Overlay</option><option value="0.3125">5/16 Overlay</option><option value="0.375">3/8 Overlay</option><option value="0.4375">7/16 Overlay</option><option value="0.5">1/2 Overlay</option><option value="0.5625">9/16 Overlay</option><option value="0.625">5/8 Overlay</option><option value="0.6875">11/16 Overlay</option><option value="0.75">3/4 Overlay</option><option value="0.8125">13/16 Overlay</option><option value="0.875">7/8 Overlay</option><option value="0.9375">15/16 Overlay</option><option value="1">1 Overlay</option><option value="1.0625">1 1/16 Overlay</option><option value="1.125">1 1/8 Overlay</option><option value="1.1875">1 3/16 Overlay</option><option value="1.25">1 1/4 Overlay</option><option value="1.3125">1 5/16 Overlay</option><option value="1.375">1 3/8 Overlay</option><option value="1.4375">1 7/16 Overlay</option><option value="1.5">1 1/2 Overlay</option><option value="1.5625">1 9/16 Overlay</option><option value="1.625">1 5/8 Overlay</option><option value="1.6875">1 11/16 Overlay</option><option value="1.75">1 3/4 Overlay</option><option value="1.8125">1 13/16 Overlay</option><option value="1.875">1 7/8 Overlay</option><option value="1.9375">1 15/16 Overlay</option><option value="2">2 Overlay</option><option value="2.0625">2 1/16 Overlay</option><option value="2.125">2 1/8 Overlay</option><option value="2.1875">2 3/16 Overlay</option><option value="2.25">2 1/4 Overlay</option><option value="2.3125">2 5/16 Overlay</option><option value="2.375">2 3/8 Overlay</option><option value="2.4375">2 7/16 Overlay</option><option value="2.5">2 1/2 Overlay</option><option value="2.5625">2 9/16 Overlay</option><option value="2.625">2 5/8 Overlay</option><option value="2.6875">2 11/16 Overlay</option><option value="2.75">2 3/4 Overlay</option><option value="2.8125">2 13/16 Overlay</option><option value="2.875">2 7/8 Overlay</option><option value="2.9375">2 15/16 Overlay</option><option value="3">3 Overlay</option><option value="3.0625">3 1/16 Overlay</option><option value="3.125">3 1/8 Overlay</option><option value="3.1875">3 3/16 Overlay</option><option value="3.25">3 1/4 Overlay</option><option value="3.3125">3 5/16 Overlay</option><option value="3.375">3 3/8 Overlay</option><option value="3.4375">3 7/16 Overlay</option><option value="3.5">3 1/2 Overlay</option><option value="3.5625">3 9/16 Overlay</option><option value="3.625">3 5/8 Overlay</option><option value="3.6875">3 11/16 Overlay</option><option value="3.75">3 3/4 Overlay</option><option value="3.8125">3 13/16 Overlay</option><option value="3.875">3 7/8 Overlay</option><option value="3.9375">3 15/16 Overlay</option><option value="4">4 Overlay</option></select></div>
+<div><label for="editOverlayBottom">Bottom Overlay</label><select id="editOverlayBottom"><option value="0.0625">1/16 Overlay</option><option value="0.125">1/8 Overlay</option><option value="0.1875">3/16 Overlay</option><option value="0.25">1/4 Overlay</option><option value="0.3125">5/16 Overlay</option><option value="0.375">3/8 Overlay</option><option value="0.4375">7/16 Overlay</option><option value="0.5">1/2 Overlay</option><option value="0.5625">9/16 Overlay</option><option value="0.625">5/8 Overlay</option><option value="0.6875">11/16 Overlay</option><option value="0.75">3/4 Overlay</option><option value="0.8125">13/16 Overlay</option><option value="0.875">7/8 Overlay</option><option value="0.9375">15/16 Overlay</option><option value="1">1 Overlay</option><option value="1.0625">1 1/16 Overlay</option><option value="1.125">1 1/8 Overlay</option><option value="1.1875">1 3/16 Overlay</option><option value="1.25">1 1/4 Overlay</option><option value="1.3125">1 5/16 Overlay</option><option value="1.375">1 3/8 Overlay</option><option value="1.4375">1 7/16 Overlay</option><option value="1.5">1 1/2 Overlay</option><option value="1.5625">1 9/16 Overlay</option><option value="1.625">1 5/8 Overlay</option><option value="1.6875">1 11/16 Overlay</option><option value="1.75">1 3/4 Overlay</option><option value="1.8125">1 13/16 Overlay</option><option value="1.875">1 7/8 Overlay</option><option value="1.9375">1 15/16 Overlay</option><option value="2">2 Overlay</option><option value="2.0625">2 1/16 Overlay</option><option value="2.125">2 1/8 Overlay</option><option value="2.1875">2 3/16 Overlay</option><option value="2.25">2 1/4 Overlay</option><option value="2.3125">2 5/16 Overlay</option><option value="2.375">2 3/8 Overlay</option><option value="2.4375">2 7/16 Overlay</option><option value="2.5">2 1/2 Overlay</option><option value="2.5625">2 9/16 Overlay</option><option value="2.625">2 5/8 Overlay</option><option value="2.6875">2 11/16 Overlay</option><option value="2.75">2 3/4 Overlay</option><option value="2.8125">2 13/16 Overlay</option><option value="2.875">2 7/8 Overlay</option><option value="2.9375">2 15/16 Overlay</option><option value="3">3 Overlay</option><option value="3.0625">3 1/16 Overlay</option><option value="3.125">3 1/8 Overlay</option><option value="3.1875">3 3/16 Overlay</option><option value="3.25">3 1/4 Overlay</option><option value="3.3125">3 5/16 Overlay</option><option value="3.375">3 3/8 Overlay</option><option value="3.4375">3 7/16 Overlay</option><option value="3.5">3 1/2 Overlay</option><option value="3.5625">3 9/16 Overlay</option><option value="3.625">3 5/8 Overlay</option><option value="3.6875">3 11/16 Overlay</option><option value="3.75">3 3/4 Overlay</option><option value="3.8125">3 13/16 Overlay</option><option value="3.875">3 7/8 Overlay</option><option value="3.9375">3 15/16 Overlay</option><option value="4">4 Overlay</option></select></div>
+<div><label for="editOverlayLeft">Left Overlay</label><select id="editOverlayLeft"><option value="-0.875">-7/8 (Reduce)</option><option value="0.0625">1/16 Overlay</option><option value="0.125">1/8 Overlay</option><option value="0.1875">3/16 Overlay</option><option value="0.25">1/4 Overlay</option><option value="0.3125">5/16 Overlay</option><option value="0.375">3/8 Overlay</option><option value="0.4375">7/16 Overlay</option><option value="0.5">1/2 Overlay</option><option value="0.5625">9/16 Overlay</option><option value="0.625">5/8 Overlay</option><option value="0.6875">11/16 Overlay</option><option value="0.75">3/4 Overlay</option><option value="0.8125">13/16 Overlay</option><option value="0.875">7/8 Overlay</option><option value="0.9375">15/16 Overlay</option><option value="1">1 Overlay</option><option value="1.0625">1 1/16 Overlay</option><option value="1.125">1 1/8 Overlay</option><option value="1.1875">1 3/16 Overlay</option><option value="1.25">1 1/4 Overlay</option><option value="1.3125">1 5/16 Overlay</option><option value="1.375">1 3/8 Overlay</option><option value="1.4375">1 7/16 Overlay</option><option value="1.5">1 1/2 Overlay</option><option value="1.5625">1 9/16 Overlay</option><option value="1.625">1 5/8 Overlay</option><option value="1.6875">1 11/16 Overlay</option><option value="1.75">1 3/4 Overlay</option><option value="1.8125">1 13/16 Overlay</option><option value="1.875">1 7/8 Overlay</option><option value="1.9375">1 15/16 Overlay</option><option value="2">2 Overlay</option><option value="2.0625">2 1/16 Overlay</option><option value="2.125">2 1/8 Overlay</option><option value="2.1875">2 3/16 Overlay</option><option value="2.25">2 1/4 Overlay</option><option value="2.3125">2 5/16 Overlay</option><option value="2.375">2 3/8 Overlay</option><option value="2.4375">2 7/16 Overlay</option><option value="2.5">2 1/2 Overlay</option><option value="2.5625">2 9/16 Overlay</option><option value="2.625">2 5/8 Overlay</option><option value="2.6875">2 11/16 Overlay</option><option value="2.75">2 3/4 Overlay</option><option value="2.8125">2 13/16 Overlay</option><option value="2.875">2 7/8 Overlay</option><option value="2.9375">2 15/16 Overlay</option><option value="3">3 Overlay</option><option value="3.0625">3 1/16 Overlay</option><option value="3.125">3 1/8 Overlay</option><option value="3.1875">3 3/16 Overlay</option><option value="3.25">3 1/4 Overlay</option><option value="3.3125">3 5/16 Overlay</option><option value="3.375">3 3/8 Overlay</option><option value="3.4375">3 7/16 Overlay</option><option value="3.5">3 1/2 Overlay</option><option value="3.5625">3 9/16 Overlay</option><option value="3.625">3 5/8 Overlay</option><option value="3.6875">3 11/16 Overlay</option><option value="3.75">3 3/4 Overlay</option><option value="3.8125">3 13/16 Overlay</option><option value="3.875">3 7/8 Overlay</option><option value="3.9375">3 15/16 Overlay</option><option value="4">4 Overlay</option></select></div>
+<div><label for="editOverlayRight">Right Overlay</label><select id="editOverlayRight"><option value="-0.875">-7/8 (Reduce)</option><option value="0.0625">1/16 Overlay</option><option value="0.125">1/8 Overlay</option><option value="0.1875">3/16 Overlay</option><option value="0.25">1/4 Overlay</option><option value="0.3125">5/16 Overlay</option><option value="0.375">3/8 Overlay</option><option value="0.4375">7/16 Overlay</option><option value="0.5">1/2 Overlay</option><option value="0.5625">9/16 Overlay</option><option value="0.625">5/8 Overlay</option><option value="0.6875">11/16 Overlay</option><option value="0.75">3/4 Overlay</option><option value="0.8125">13/16 Overlay</option><option value="0.875">7/8 Overlay</option><option value="0.9375">15/16 Overlay</option><option value="1">1 Overlay</option><option value="1.0625">1 1/16 Overlay</option><option value="1.125">1 1/8 Overlay</option><option value="1.1875">1 3/16 Overlay</option><option value="1.25">1 1/4 Overlay</option><option value="1.3125">1 5/16 Overlay</option><option value="1.375">1 3/8 Overlay</option><option value="1.4375">1 7/16 Overlay</option><option value="1.5">1 1/2 Overlay</option><option value="1.5625">1 9/16 Overlay</option><option value="1.625">1 5/8 Overlay</option><option value="1.6875">1 11/16 Overlay</option><option value="1.75">1 3/4 Overlay</option><option value="1.8125">1 13/16 Overlay</option><option value="1.875">1 7/8 Overlay</option><option value="1.9375">1 15/16 Overlay</option><option value="2">2 Overlay</option><option value="2.0625">2 1/16 Overlay</option><option value="2.125">2 1/8 Overlay</option><option value="2.1875">2 3/16 Overlay</option><option value="2.25">2 1/4 Overlay</option><option value="2.3125">2 5/16 Overlay</option><option value="2.375">2 3/8 Overlay</option><option value="2.4375">2 7/16 Overlay</option><option value="2.5">2 1/2 Overlay</option><option value="2.5625">2 9/16 Overlay</option><option value="2.625">2 5/8 Overlay</option><option value="2.6875">2 11/16 Overlay</option><option value="2.75">2 3/4 Overlay</option><option value="2.8125">2 13/16 Overlay</option><option value="2.875">2 7/8 Overlay</option><option value="2.9375">2 15/16 Overlay</option><option value="3">3 Overlay</option><option value="3.0625">3 1/16 Overlay</option><option value="3.125">3 1/8 Overlay</option><option value="3.1875">3 3/16 Overlay</option><option value="3.25">3 1/4 Overlay</option><option value="3.3125">3 5/16 Overlay</option><option value="3.375">3 3/8 Overlay</option><option value="3.4375">3 7/16 Overlay</option><option value="3.5">3 1/2 Overlay</option><option value="3.5625">3 9/16 Overlay</option><option value="3.625">3 5/8 Overlay</option><option value="3.6875">3 11/16 Overlay</option><option value="3.75">3 3/4 Overlay</option><option value="3.8125">3 13/16 Overlay</option><option value="3.875">3 7/8 Overlay</option><option value="3.9375">3 15/16 Overlay</option><option value="4">4 Overlay</option></select></div>
+</div>
+<div class="action-row" style="margin-top:14px; margin-bottom:0;"><button class="primary" type="button" onclick="saveEditedOrderItem()">Save Changes</button><button type="button" onclick="cancelEditOrderItem()">Cancel</button></div>
+</div>
+</div>
+<div class="help">Built for field use on a phone, tablet, or laptop.</div>
+</div>
+</div>
+</div>
+<div id="printCanvas" style="display: none;"><div class="print-page">
+
+<div class="print-header">
+<div class="print-mark">KTU</div>
+<div>
+<div class="print-sub">Kitchen Tune-Up Buffalo</div>
+<div class="print-title-main">Door &amp; Drawer Order Sheet</div>
+</div>
+</div>
+
+<div class="print-title">Cover Sheet</div>
+<div class="print-meta" id="printCoverContent">No cover sheet details entered yet.</div>
+
+<div class="print-title">Order Sheet</div>
+
+<table class="print-table"><thead><tr><th>Identifier</th><th>Front Type</th><th>Description</th><th>Width</th><th>Height</th><th>Qty / Amount</th><th>Hinge</th><th>Overlay</th></tr></thead><tbody id="printOrderBody"></tbody></table></div></div>
+<div class="modal-backdrop" id="copyModal"><div class="modal-card"><h3 id="copyModalTitle">Copy Text</h3><p id="copyModalMessage">Clipboard access is blocked here. The text is ready below for manual copy.</p><textarea id="copyFallbackText" class="copy-box" readonly=""></textarea><div class="action-row" style="margin-top:12px; margin-bottom:0;"><button class="primary" type="button" onclick="selectFallbackText()">Select All</button><button type="button" onclick="closeCopyModal()">Close</button></div></div></div>
+<script>
+const splitWidthThreshold = 20.5;
+const orderSheetItems = [];
+let editingOrderIndex = -1;
+let currentSavedJobId = null;
+let autoSaveTimer = null;
+let isRestoringAutoSave = false;
+const STORAGE_KEY = 'cabinetDoorFieldTool.savedJobs.v2';
+const AUTOSAVE_KEY = 'cabinetDoorFieldTool.autoSaveDraft.v1';
+const BACKUP_HISTORY_KEY = 'cabinetDoorFieldTool.backupHistory.v1';
+const overlayOptions = buildOverlayOptions();
+const overlayLabels = buildOverlayLabels();
+
+function $(id) { return document.getElementById(id); }
+function roundValue(value, increment) { const inc = parseFloat(increment); return !inc ? value : Math.round(value / inc) * inc; }
+function formatNumber(num) { return Number(num || 0).toFixed(4).replace(/0+$/, '').replace(/\.$/, ''); }
+function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text == null ? '' : String(text); return div.innerHTML; }
+function isPanelType(type) { return type === 'panel_1_4' || type === 'panel_3_4'; }
+function isMiscType(type) { return type === 'misc'; }
+function getFrontTypeLabel(type) { if (type === 'drawer') return 'Drawer'; if (type === 'panel_1_4') return '1/4 Panel'; if (type === 'panel_3_4') return '3/4 Panel'; if (type === 'misc') return 'Misc.'; return 'Door'; }
+
+function toFraction(value) {
+const sign = value < 0 ? '-' : '';
+const abs = Math.abs(value);
+const whole = Math.floor(abs);
+const fraction = Math.round((abs - whole) * 16) / 16;
+const map = {0:'',0.0625:'1/16',0.125:'1/8',0.1875:'3/16',0.25:'1/4',0.3125:'5/16',0.375:'3/8',0.4375:'7/16',0.5:'1/2',0.5625:'9/16',0.625:'5/8',0.6875:'11/16',0.75:'3/4',0.8125:'13/16',0.875:'7/8',0.9375:'15/16'};
+const frac = map[fraction];
+if (frac === undefined) return formatNumber(value);
+if (whole === 0) return sign + (frac || '0');
+return sign + (frac ? whole + ' ' + frac : String(whole));
+}
+
+function buildOverlayOptions() {
+const values = ['-0.875'];
+for (let sixteenths = 1; sixteenths <= 64; sixteenths += 1) values.push(String(sixteenths / 16));
+return values;
+}
+
+function buildOverlayLabels() {
+const labels = { '-0.875': '-7/8 (Reduce)' };
+for (let sixteenths = 1; sixteenths <= 64; sixteenths += 1) {
+const value = sixteenths / 16;
+labels[String(value)] = toFraction(value) + ' Overlay';
+}
+return labels;
+}
+
+function populateOverlaySelect(selectId, includeNegative) {
+const select = $(selectId);
+if (!select) return;
+const current = select.value || '0.5';
+select.innerHTML = '';
+overlayOptions.forEach((value) => {
+if (!includeNegative && value.startsWith('-')) return;
+const option = document.createElement('option');
+option.value = value;
+option.textContent = overlayLabels[value] || value;
+select.appendChild(option);
+});
+select.value = Array.from(select.options).some((opt) => opt.value === current) ? current : '0.5';
+select.onchange = handleOverlayChange;
+select.oninput = handleOverlayChange;
+}
+
+function populateAllOverlaySelects() {
+populateOverlaySelect('overlayTop', false);
+populateOverlaySelect('overlayBottom', false);
+populateOverlaySelect('overlayLeft', true);
+populateOverlaySelect('overlayRight', true);
+populateOverlaySelect('editOverlayTop', false);
+populateOverlaySelect('editOverlayBottom', false);
+populateOverlaySelect('editOverlayLeft', true);
+populateOverlaySelect('editOverlayRight', true);
+}
+
+function syncAdvancedOverlayFields(value) {
+const normalized = String(parseFloat(value) || 0);
+const safe = overlayOptions.includes(normalized) ? normalized : '0.5';
+['overlayTop','overlayBottom','overlayLeft','overlayRight'].forEach((id) => { if ($(id)) $(id).value = safe; });
+}
+
+function getOverlayConfig() {
+return { advanced: true, top: parseFloat($('overlayTop').value) || 0, bottom: parseFloat($('overlayBottom').value) || 0, left: parseFloat($('overlayLeft').value) || 0, right: parseFloat($('overlayRight').value) || 0 };
+}
+
+function syncBaseOverlayFromAdvanced() {
+const cfg = getOverlayConfig();
+$('overlay').value = formatNumber((cfg.top + cfg.bottom + cfg.left + cfg.right) / 4);
+}
+
+function handleOverlayChange() { syncBaseOverlayFromAdvanced(); calculate(); }
+
+function getDoorCalculation(frontType, openingWidth, openingHeight, gap, rounding, overlayConfig, splitMode, panelWidth, panelHeight, miscAmount, heightSplitMode) {
+if (isMiscType(frontType)) return { isDrawer:false, isDouble:false, isHeightDouble:false, frontTypeLabel:'Misc.', doorTypeLabel:'Misc.', quantity:1, doorWidth:0, doorHeight:0, widthNote:'Misc. item', overlayConfig, amountText:miscAmount || '' };
+if (isPanelType(frontType)) return { isDrawer:false, isDouble:false, isHeightDouble:false, frontTypeLabel:getFrontTypeLabel(frontType), doorTypeLabel:'Single', quantity:1, doorWidth:panelWidth || 0, doorHeight:panelHeight || 0, widthNote:'Manual panel size', overlayConfig, amountText:'1' };
+const isDrawer = frontType === 'drawer';
+let isDouble = openingWidth >= splitWidthThreshold;
+if (splitMode === 'force_single') isDouble = false;
+if (splitMode === 'force_double') isDouble = true;
+const totalWidth = openingWidth + overlayConfig.left + overlayConfig.right;
+const totalHeight = openingHeight + overlayConfig.top + overlayConfig.bottom;
+const isHeightDouble = isDrawer && heightSplitMode === 'force_double';
+const drawerHeightGap = 0.25;
+const widthCount = isDouble ? 2 : 1;
+const heightCount = isHeightDouble ? 2 : 1;
+const width = roundValue(isDouble ? (totalWidth - gap) / 2 : totalWidth, rounding);
+const height = roundValue(isHeightDouble ? (totalHeight - drawerHeightGap) / 2 : totalHeight, rounding);
+const quantity = widthCount * heightCount;
+let doorTypeLabel = isDouble ? 'Double Width' : 'Single';
+if (isDrawer && isHeightDouble) doorTypeLabel = isDouble ? 'Double Width + Double Height' : 'Double Height';
+return { isDrawer, isDouble, isHeightDouble, widthCount, heightCount, frontTypeLabel:isDrawer ? 'Drawer' : 'Door', doorTypeLabel, quantity, doorWidth:width, doorHeight:height, widthNote:(isDouble || isHeightDouble) ? 'Size for each front' : 'Finished width', overlayConfig, amountText:String(quantity) };
+}
+
+function getSelectedOverlayForOrder(hingePlacement, overlayConfig, isDouble, frontType) {
+if (isPanelType(frontType) || isMiscType(frontType)) return 'Manual';
+if (hingePlacement === 'NB') return 'No Bore';
+const left = toFraction(overlayConfig.left);
+const right = toFraction(overlayConfig.right);
+if (isDouble || hingePlacement === 'B') return 'L ' + left + ' / R ' + right;
+if (hingePlacement === 'L') return 'L ' + left;
+if (hingePlacement === 'R') return 'R ' + right;
+return 'L ' + left + ' / R ' + right;
+}
+
+function getCurrentEntryData() {
+const frontType = $('frontType').value;
+const overlayConfig = getOverlayConfig();
+const data = {
+doorSplitMode: $('doorSplitMode').value,
+drawerHeightSplitMode: $('drawerHeightSplitMode').value,
+customerName: $('jobName').value.trim(),
+doorStyle: $('doorStyle').value.trim(),
+species: $('species').value.trim(),
+finishColor: $('finishColor').value.trim(),
+hingePlacement: $('hingePlacement').value,
+identifier: $('doorIdentifier').value.trim(),
+frontType,
+openingWidth: parseFloat($('openingWidth').value) || 0,
+openingHeight: parseFloat($('openingHeight').value) || 0,
+panelWidth: parseFloat($('panelWidth').value) || 0,
+panelHeight: parseFloat($('panelHeight').value) || 0,
+miscDescription: isMiscType(frontType) ? $('miscDescription').value.trim() : '',
+miscAmount: isMiscType(frontType) ? $('miscAmount').value.trim() : '',
+overlay: parseFloat($('overlay').value) || 0,
+gap: parseFloat($('gap').value) || 0,
+rounding: $('rounding').value,
+overlayConfig
+};
+data.result = getDoorCalculation(frontType, data.openingWidth, data.openingHeight, data.gap, data.rounding, overlayConfig, data.doorSplitMode, data.panelWidth, data.panelHeight, data.miscAmount, data.drawerHeightSplitMode);
+return data;
+}
+
+function getSavedJobs() { try { const raw = localStorage.getItem(STORAGE_KEY); const parsed = raw ? JSON.parse(raw) : []; return Array.isArray(parsed) ? parsed : []; } catch (e) { console.error(e); return []; } }
+function setSavedJobs(jobs) { localStorage.setItem(STORAGE_KEY, JSON.stringify(jobs)); }
+function setAutoSaveStatus(message) { const el = $('autoSaveStatus'); if (el) el.textContent = message; }
+function makeNewJobId() { return 'job_' + Date.now() + '_' + Math.floor(Math.random() * 100000); }
+
+function getJobSnapshot(forceNewId) {
+const current = getCurrentEntryData();
+return { id: forceNewId ? makeNewJobId() : (currentSavedJobId || makeNewJobId()), savedJobName: $('savedJobName').value.trim() || current.customerName || ('Saved Job ' + new Date().toLocaleString()), customerName: current.customerName, doorStyle: current.doorStyle, species: current.species, finishColor: current.finishColor, currentInputs: { doorIdentifier: current.identifier, frontType: current.frontType, openingWidth: current.openingWidth, openingHeight: current.openingHeight, panelWidth: current.panelWidth, panelHeight: current.panelHeight, miscDescription: current.miscDescription, miscAmount: current.miscAmount, overlay: current.overlay, gap: current.gap, rounding: current.rounding, doorSplitMode: current.doorSplitMode, drawerHeightSplitMode: current.drawerHeightSplitMode, hingePlacement: current.hingePlacement, overlayTop: current.overlayConfig.top, overlayBottom: current.overlayConfig.bottom, overlayLeft: current.overlayConfig.left, overlayRight: current.overlayConfig.right }, orderSheetItems: JSON.parse(JSON.stringify(orderSheetItems)), updatedAt: new Date().toISOString() };
+}
+
+function saveAutoDraft() {
+if (isRestoringAutoSave) return;
+try {
+const snapshot = getJobSnapshot(false);
+snapshot.autoSavedAt = new Date().toISOString();
+localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(snapshot));
+if (currentSavedJobId) {
+const jobs = getSavedJobs();
+const idx = jobs.findIndex((job) => job.id === currentSavedJobId);
+if (idx >= 0) jobs[idx] = snapshot; else jobs.unshift(snapshot);
+setSavedJobs(jobs);
+renderSavedJobsLibrary();
+setAutoSaveStatus('Auto-saved loaded kitchen at ' + new Date().toLocaleTimeString());
+} else {
+setAutoSaveStatus('Auto-saved draft at ' + new Date().toLocaleTimeString());
+}
+} catch (error) { console.error(error); setAutoSaveStatus('Auto-save could not complete'); }
+}
+
+function scheduleAutoSave() { if (isRestoringAutoSave) return; clearTimeout(autoSaveTimer); autoSaveTimer = setTimeout(saveAutoDraft, 600); }
+
+function restoreAutoDraft() {
+try {
+const raw = localStorage.getItem(AUTOSAVE_KEY);
+if (!raw) return false;
+const draft = JSON.parse(raw);
+if (!draft || !draft.currentInputs) return false;
+isRestoringAutoSave = true;
+applyJobSnapshotToTool(draft, false);
+isRestoringAutoSave = false;
+setAutoSaveStatus('Restored auto-saved draft');
+return true;
+} catch (error) { console.error(error); isRestoringAutoSave = false; return false; }
+}
+
+function saveCurrentJobToLibrary() {
+const jobs = getSavedJobs();
+const snapshot = getJobSnapshot(true);
+currentSavedJobId = snapshot.id;
+jobs.unshift(snapshot);
+setSavedJobs(jobs);
+localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(snapshot));
+renderSavedJobsLibrary();
+setAutoSaveStatus('Saved new kitchen at ' + new Date().toLocaleTimeString());
+alert('New kitchen saved to library.');
+}
+
+function updateCurrentSavedJob() {
+if (!currentSavedJobId) { saveCurrentJobToLibrary(); return; }
+const jobs = getSavedJobs();
+const snapshot = getJobSnapshot(false);
+const idx = jobs.findIndex((job) => job.id === currentSavedJobId);
+if (idx >= 0) jobs[idx] = snapshot; else jobs.unshift(snapshot);
+setSavedJobs(jobs);
+localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(snapshot));
+renderSavedJobsLibrary();
+setAutoSaveStatus('Updated loaded kitchen at ' + new Date().toLocaleTimeString());
+alert('Loaded kitchen updated.');
+}
+
+function startNewKitchen() {
+currentSavedJobId = null;
+['savedJobName','doorIdentifier','jobName','doorStyle','finishColor','miscDescription','miscAmount'].forEach((id) => { $(id).value = ''; });
+$('species').value = ''; $('frontType').value = 'door'; $('openingWidth').value = '15'; $('openingHeight').value = '30'; $('panelWidth').value = '0'; $('panelHeight').value = '0'; $('overlay').value = '0.5'; $('gap').value = '0.125'; $('rounding').value = 'none'; $('doorSplitMode').value = 'auto'; $('drawerHeightSplitMode').value = 'auto'; $('hingePlacement').value = 'L';
+syncAdvancedOverlayFields(0.5); orderSheetItems.length = 0; cancelEditOrderItem(); renderOrderSheet(); renderSavedJobsLibrary(); handleFrontTypeChange(); calculate(); localStorage.removeItem(AUTOSAVE_KEY); setAutoSaveStatus('Started new kitchen');
+}
+
+function applyJobSnapshotToTool(job, markAsLoaded) {
+if (!job) return;
+if (markAsLoaded) currentSavedJobId = job.id;
+$('savedJobName').value = job.savedJobName || ''; $('jobName').value = job.customerName || ''; $('doorStyle').value = job.doorStyle || ''; $('species').value = job.species || ''; $('finishColor').value = job.finishColor || '';
+const i = job.currentInputs || {};
+$('doorIdentifier').value = i.doorIdentifier || ''; $('frontType').value = i.frontType || 'door'; $('openingWidth').value = i.openingWidth ?? 15; $('openingHeight').value = i.openingHeight ?? 30; $('panelWidth').value = i.panelWidth ?? 0; $('panelHeight').value = i.panelHeight ?? 0; $('miscDescription').value = i.miscDescription || ''; $('miscAmount').value = i.miscAmount || ''; $('overlay').value = i.overlay ?? 0.5; $('gap').value = i.gap ?? 0.125; $('rounding').value = i.rounding || 'none'; $('doorSplitMode').value = i.doorSplitMode || 'auto'; $('drawerHeightSplitMode').value = i.drawerHeightSplitMode || 'auto'; $('hingePlacement').value = i.hingePlacement || 'L';
+$('overlayTop').value = String(i.overlayTop ?? 0.5); $('overlayBottom').value = String(i.overlayBottom ?? 0.5); $('overlayLeft').value = String(i.overlayLeft ?? 0.5); $('overlayRight').value = String(i.overlayRight ?? 0.5);
+orderSheetItems.length = 0; (job.orderSheetItems || []).forEach((item) => orderSheetItems.push(item)); renderOrderSheet(); renderSavedJobsLibrary(); handleFrontTypeChange(); calculate();
+}
+
+function loadSavedJob(jobId) {
+const job = getSavedJobs().find((entry) => entry.id === jobId);
+if (!job) return;
+isRestoringAutoSave = true;
+applyJobSnapshotToTool(job, true);
+isRestoringAutoSave = false;
+localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(job));
+setAutoSaveStatus('Loaded kitchen. Auto-save is on.');
+}
+
+function deleteSavedJob(jobId) { const jobs = getSavedJobs().filter((job) => job.id !== jobId); if (currentSavedJobId === jobId) currentSavedJobId = null; setSavedJobs(jobs); renderSavedJobsLibrary(); }
+function exportSavedJobs() { openCopyModal('Export Saved Jobs', 'Your saved jobs library is ready below. Copy and save it anywhere you like.', JSON.stringify(getSavedJobs(), null, 2)); }
+
+function getBackupHistory() { try { return JSON.parse(localStorage.getItem(BACKUP_HISTORY_KEY) || '[]'); } catch (e) { return []; } }
+function setBackupHistory(history) { localStorage.setItem(BACKUP_HISTORY_KEY, JSON.stringify(history)); }
+
+function backupLibrary() {
+try {
+const jobs = getSavedJobs();
+const now = Date.now();
+const history = getBackupHistory().filter((entry) => now - entry.time < 7 * 24 * 60 * 60 * 1000).slice(0, 5);
+const data = JSON.stringify({ exportedAt: new Date().toISOString(), savedJobs: jobs }, null, 2);
+const blob = new Blob([data], { type: 'application/json' });
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = 'door-drawer-library-backup-' + new Date().toISOString().slice(0,10) + '.json';
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+URL.revokeObjectURL(url);
+history.unshift({ time: now, count: jobs.length });
+setBackupHistory(history.slice(0, 5));
+setAutoSaveStatus('Backup downloaded. Old backup records cleaned.');
+} catch (e) { console.error(e); alert('Backup failed'); }
+}
+
+function triggerImport() { const input = $('importFileInput'); if (!input) return; input.value = ''; input.click(); }
+
+function importLibraryFromFile(file) {
+if (!file) return;
+const reader = new FileReader();
+reader.onload = function(event) {
+try {
+const parsed = JSON.parse(String(event.target.result || '[]'));
+const importedJobs = Array.isArray(parsed) ? parsed : parsed.savedJobs;
+if (!Array.isArray(importedJobs)) throw new Error('Invalid format');
+const existing = getSavedJobs();
+const map = new Map();
+existing.forEach((job) => map.set(job.id, job));
+importedJobs.forEach((job) => map.set(job.id || makeNewJobId(), job));
+const merged = Array.from(map.values()).sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
+setSavedJobs(merged);
+renderSavedJobsLibrary();
+setAutoSaveStatus('Library restored from file');
+alert('Library restored successfully.');
+} catch (err) { console.error(err); alert('Import failed. Make sure this is a valid backup file.'); }
+};
+reader.readAsText(file);
+}
+
+function renderSavedJobsLibrary() {
+const jobs = getSavedJobs();
+const body = $('savedJobsBody');
+const empty = $('savedJobsEmpty');
+const count = $('savedJobCount');
+const search = ($('savedJobSearch').value || '').trim().toLowerCase();
+body.innerHTML = '';
+const filtered = jobs.filter((job) => {
+if (!search) return true;
+const ids = (job.orderSheetItems || []).map((item) => item.identifier).join(' ');
+return [job.savedJobName, job.customerName, job.doorStyle, ids].join(' ').toLowerCase().includes(search);
+});
+count.textContent = String(jobs.length);
+if (filtered.length === 0) { empty.style.display = 'block'; empty.textContent = jobs.length === 0 ? 'No saved jobs yet.' : 'No saved jobs match your search.'; return; }
+if (filtered.length > 5) { empty.style.display = 'block'; empty.textContent = 'Showing the 5 most recently saved deals. Older saved deals are hidden from this list.'; } else { empty.style.display = 'none'; }
+filtered.slice(0, 5).forEach((job) => {
+const row = document.createElement('tr');
+row.innerHTML = '<td>' + escapeHtml(job.savedJobName || 'Saved Job') + '</td><td>' + escapeHtml(job.customerName || '') + '</td><td>' + escapeHtml(String((job.orderSheetItems || []).length)) + '</td><td>' + escapeHtml(new Date(job.updatedAt).toLocaleString()) + '</td><td><button type="button" data-load-id="' + escapeHtml(job.id) + '">Load</button> <button type="button" data-delete-id="' + escapeHtml(job.id) + '">Delete</button></td>';
+body.appendChild(row);
+});
+body.querySelectorAll('[data-load-id]').forEach((btn) => btn.addEventListener('click', () => loadSavedJob(btn.getAttribute('data-load-id'))));
+body.querySelectorAll('[data-delete-id]').forEach((btn) => btn.addEventListener('click', () => deleteSavedJob(btn.getAttribute('data-delete-id'))));
+}
+
+function renderCoverSheet() { const c = getCurrentEntryData(); const lines = []; if (c.customerName) lines.push('<strong>Customer:</strong> ' + escapeHtml(c.customerName)); if (c.doorStyle) lines.push('<strong>Door Style:</strong> ' + escapeHtml(c.doorStyle)); if (c.species) lines.push('<strong>Species:</strong> ' + escapeHtml(c.species)); if (c.finishColor) lines.push('<strong>Finish / Color:</strong> ' + escapeHtml(c.finishColor)); $('coverSheetDisplay').innerHTML = lines.length ? lines.join('<br>') : 'No cover sheet details entered yet.'; }
+
+function renderPrintCanvas() {
+const c = getCurrentEntryData();
+const cover = [];
+if (c.customerName) cover.push('<strong>Customer:</strong> ' + escapeHtml(c.customerName));
+if (c.doorStyle) cover.push('<strong>Door Style:</strong> ' + escapeHtml(c.doorStyle));
+if (c.species) cover.push('<strong>Species:</strong> ' + escapeHtml(c.species));
+if (c.finishColor) cover.push('<strong>Finish / Color:</strong> ' + escapeHtml(c.finishColor));
+$('printCoverContent').innerHTML = cover.length ? cover.join('<br>') : 'No cover sheet details entered yet.';
+const body = $('printOrderBody');
+body.innerHTML = '';
+orderSheetItems.forEach((item) => { const row = document.createElement('tr'); row.innerHTML = buildOrderRowCells(item, false, 0); body.appendChild(row); });
+}
+
+function updateMainFrontTypeUI(frontType) { const panel = isPanelType(frontType); const misc = isMiscType(frontType); const drawer = frontType === 'drawer'; $('panelWidthWrap').style.display = panel ? 'block' : 'none'; $('panelHeightWrap').style.display = panel ? 'block' : 'none'; $('miscDescriptionWrap').style.display = misc ? 'block' : 'none'; $('miscAmountWrap').style.display = misc ? 'block' : 'none'; $('drawerHeightSplitWrap').style.display = drawer ? 'block' : 'none'; }
+function updateEditFrontTypeUI(frontType) { const panel = isPanelType(frontType); const misc = isMiscType(frontType); const drawer = frontType === 'drawer'; $('editPanelWidthWrap').style.display = panel ? 'block' : 'none'; $('editPanelHeightWrap').style.display = panel ? 'block' : 'none'; $('editMiscDescriptionWrap').style.display = misc ? 'block' : 'none'; $('editMiscAmountWrap').style.display = misc ? 'block' : 'none'; $('editDrawerHeightSplitWrap').style.display = drawer ? 'block' : 'none'; }
+
+function calculate() {
+const c = getCurrentEntryData();
+const r = c.result;
+const hinge = $('hingePlacement');
+const panel = isPanelType(c.frontType);
+const misc = isMiscType(c.frontType);
+updateMainFrontTypeUI(c.frontType);
+if (c.frontType === 'drawer' || panel || misc) { hinge.value = 'NB'; c.hingePlacement = 'NB'; }
+else if (r.isDouble && hinge.value !== 'B' && hinge.value !== 'NB') { hinge.value = 'B'; c.hingePlacement = 'B'; }
+$('doorTypeDisplay').textContent = r.frontTypeLabel;
+$('doorWidthDisplay').textContent = misc ? '' : formatNumber(r.doorWidth);
+$('doorHeightDisplay').textContent = misc ? '' : formatNumber(r.doorHeight);
+$('doorWidthNote').textContent = r.widthNote;
+if (misc) $('autoRuleMessage').textContent = 'Misc. selected. Enter the material description and amount needed.';
+else if (panel) $('autoRuleMessage').textContent = 'Panel selected. Exact panel width and panel height are used.';
+else if (r.isDrawer && r.isDouble) $('autoRuleMessage').textContent = 'Drawer selected. This uses 2 drawer fronts.';
+else if (r.isDrawer) $('autoRuleMessage').textContent = 'Drawer selected. This uses 1 drawer front.';
+else if (r.isDouble) $('autoRuleMessage').textContent = 'Door selected. This uses 2 doors.';
+else $('autoRuleMessage').textContent = 'Door selected. This uses 1 door.';
+const s = [];
+if (c.customerName) s.push('<strong>Customer:</strong> ' + escapeHtml(c.customerName));
+if (c.doorStyle) s.push('<strong>Door style:</strong> ' + escapeHtml(c.doorStyle));
+if (c.species) s.push('<strong>Species:</strong> ' + escapeHtml(c.species));
+if (c.finishColor) s.push('<strong>Finish / Color:</strong> ' + escapeHtml(c.finishColor));
+if (c.identifier) s.push('<strong>Identifier:</strong> ' + escapeHtml(c.identifier));
+s.push('<strong>Front type:</strong> ' + r.frontTypeLabel);
+s.push('<strong>Hinge placement:</strong> ' + escapeHtml(c.hingePlacement));
+if (misc) {
+if (c.miscDescription) s.push('<strong>Description:</strong> ' + escapeHtml(c.miscDescription));
+if (c.miscAmount) s.push('<strong>Amount needed:</strong> ' + escapeHtml(c.miscAmount));
+s.push('<strong>Result:</strong> Add misc. material to the order sheet.');
+} else if (panel) {
+s.push('<strong>Panel size:</strong> ' + formatNumber(c.panelWidth) + ' W x ' + formatNumber(c.panelHeight) + ' H');
+s.push('<strong>Result:</strong> Order 1 panel at ' + formatNumber(r.doorWidth) + ' W x ' + formatNumber(r.doorHeight) + ' H.');
+} else {
+s.push('<strong>Opening:</strong> ' + formatNumber(c.openingWidth) + ' W x ' + formatNumber(c.openingHeight) + ' H');
+s.push('<strong>Width split rule:</strong> ' + escapeHtml(c.doorSplitMode));
+if (c.frontType === 'drawer') s.push('<strong>Drawer height split rule:</strong> ' + escapeHtml(c.drawerHeightSplitMode));
+s.push('<strong>Overlays:</strong> Top ' + formatNumber(r.overlayConfig.top) + ', Bottom ' + formatNumber(r.overlayConfig.bottom) + ', Left ' + formatNumber(r.overlayConfig.left) + ', Right ' + formatNumber(r.overlayConfig.right));
+s.push('<strong>Result:</strong> Order ' + r.quantity + ' ' + (r.isDrawer ? 'drawer front' : 'door') + (r.quantity > 1 ? 's' : '') + ' at ' + formatNumber(r.doorWidth) + ' W x ' + formatNumber(r.doorHeight) + ' H' + (r.quantity > 1 ? ' each.' : '.'));
+}
+$('summaryText').innerHTML = s.join('<br>');
+renderCoverSheet();
+renderPrintCanvas();
+scheduleAutoSave();
+}
+
+function handleFrontTypeChange() {
+const type = $('frontType').value;
+const hinge = $('hingePlacement');
+updateMainFrontTypeUI(type);
+if (!isMiscType(type)) { $('miscDescription').value = ''; $('miscAmount').value = ''; }
+if (type === 'drawer' || isPanelType(type) || isMiscType(type)) hinge.value = 'NB';
+else if (hinge.value === 'NB') hinge.value = 'L';
+calculate();
+}
+
+function addCurrentToOrderSheet() {
+const c = getCurrentEntryData();
+const n = orderSheetItems.length + 1;
+orderSheetItems.push({ doorSplitMode:c.doorSplitMode, drawerHeightSplitMode:c.drawerHeightSplitMode, customerName:c.customerName, doorStyle:c.doorStyle, species:c.species, finishColor:c.finishColor, identifier:c.identifier || ('Item ' + n), frontType:c.frontType, openingWidth:c.openingWidth, openingHeight:c.openingHeight, panelWidth:c.panelWidth, panelHeight:c.panelHeight, overlay:c.overlay, gap:c.gap, rounding:c.rounding, hingePlacement:c.hingePlacement, overlayConfig:{...c.overlayConfig}, result:{...c.result}, miscDescription:c.miscDescription, miscAmount:c.miscAmount });
+renderOrderSheet();
+renderPrintCanvas();
+$('doorIdentifier').value = '';
+calculate();
+scheduleAutoSave();
+}
+
+function startEditOrderItem(index) {
+const item = orderSheetItems[index];
+if (!item) return;
+editingOrderIndex = index;
+populateAllOverlaySelects();
+$('orderItemEditor').style.display = 'block';
+$('editIdentifier').value = item.identifier || '';
+$('editFrontType').value = item.frontType || 'door';
+$('editHingePlacement').value = item.hingePlacement || 'L';
+$('editOpeningWidth').value = item.openingWidth || 0;
+$('editOpeningHeight').value = item.openingHeight || 0;
+$('editPanelWidth').value = item.panelWidth || 0;
+$('editPanelHeight').value = item.panelHeight || 0;
+$('editMiscDescription').value = item.miscDescription || '';
+$('editMiscAmount').value = item.miscAmount || '';
+$('editGap').value = item.gap || 0.125;
+$('editRounding').value = item.rounding || 'none';
+$('editDoorSplitMode').value = item.doorSplitMode || 'auto';
+$('editDrawerHeightSplitMode').value = item.drawerHeightSplitMode || 'auto';
+$('editOverlayTop').value = String(item.overlayConfig?.top ?? 0.5);
+$('editOverlayBottom').value = String(item.overlayConfig?.bottom ?? 0.5);
+$('editOverlayLeft').value = String(item.overlayConfig?.left ?? 0.5);
+$('editOverlayRight').value = String(item.overlayConfig?.right ?? 0.5);
+handleEditFrontTypeChange();
+}
+
+function handleEditFrontTypeChange() { const type = $('editFrontType').value; const hinge = $('editHingePlacement'); updateEditFrontTypeUI(type); if (type === 'drawer' || isPanelType(type) || isMiscType(type)) hinge.value = 'NB'; else if (hinge.value === 'NB') hinge.value = 'L'; }
+
+function saveEditedOrderItem() {
+if (editingOrderIndex < 0 || !orderSheetItems[editingOrderIndex]) return;
+const type = $('editFrontType').value;
+const overlayConfig = { advanced:true, top:parseFloat($('editOverlayTop').value)||0, bottom:parseFloat($('editOverlayBottom').value)||0, left:parseFloat($('editOverlayLeft').value)||0, right:parseFloat($('editOverlayRight').value)||0 };
+const openingWidth = parseFloat($('editOpeningWidth').value)||0;
+const openingHeight = parseFloat($('editOpeningHeight').value)||0;
+const panelWidth = parseFloat($('editPanelWidth').value)||0;
+const panelHeight = parseFloat($('editPanelHeight').value)||0;
+const gap = parseFloat($('editGap').value)||0;
+const rounding = $('editRounding').value;
+const split = $('editDoorSplitMode').value;
+const heightSplit = $('editDrawerHeightSplitMode').value;
+const miscDescription = isMiscType(type) ? $('editMiscDescription').value.trim() : '';
+const miscAmount = isMiscType(type) ? $('editMiscAmount').value.trim() : '';
+const result = getDoorCalculation(type, openingWidth, openingHeight, gap, rounding, overlayConfig, split, panelWidth, panelHeight, miscAmount, heightSplit);
+let hinge = $('editHingePlacement').value;
+if (type === 'drawer' || isPanelType(type) || isMiscType(type)) hinge = 'NB';
+else if (result.isDouble && hinge !== 'NB') hinge = 'B';
+const item = orderSheetItems[editingOrderIndex];
+Object.assign(item, { identifier:$('editIdentifier').value.trim() || ('Item ' + (editingOrderIndex + 1)), frontType:type, openingWidth, openingHeight, panelWidth, panelHeight, gap, rounding, doorSplitMode:split, drawerHeightSplitMode:heightSplit, hingePlacement:hinge, overlayConfig, overlay:(overlayConfig.top + overlayConfig.bottom + overlayConfig.left + overlayConfig.right) / 4, result, miscDescription, miscAmount });
+renderOrderSheet();
+renderPrintCanvas();
+cancelEditOrderItem();
+scheduleAutoSave();
+}
+
+function cancelEditOrderItem() { editingOrderIndex = -1; if ($('orderItemEditor')) $('orderItemEditor').style.display = 'none'; }
+function removeOrderItem(index) { orderSheetItems.splice(index, 1); renderOrderSheet(); renderPrintCanvas(); scheduleAutoSave(); }
+function clearOrderSheet() { if (!confirm('Are you sure that you want to clear this data?')) return; orderSheetItems.length = 0; cancelEditOrderItem(); renderOrderSheet(); renderPrintCanvas(); scheduleAutoSave(); }
+
+function buildOrderRowCells(item, includeAction, index) {
+const width = isMiscType(item.frontType) ? '' : formatNumber(item.result.doorWidth);
+const height = isMiscType(item.frontType) ? '' : formatNumber(item.result.doorHeight);
+const amount = isMiscType(item.frontType) ? (item.miscAmount || '') : String(item.result.quantity);
+let cells = '<td>' + escapeHtml(item.identifier) + '</td><td>' + escapeHtml(item.result.frontTypeLabel) + '</td><td>' + escapeHtml(item.miscDescription || '') + '</td><td>' + escapeHtml(width) + '</td><td>' + escapeHtml(height) + '</td><td>' + escapeHtml(amount) + '</td><td>' + escapeHtml(item.hingePlacement) + '</td><td>' + escapeHtml(getSelectedOverlayForOrder(item.hingePlacement, item.overlayConfig, item.result.isDouble, item.frontType)) + '</td>';
+if (includeAction) cells += '<td><button type="button" onclick="startEditOrderItem(' + index + ')">Edit</button> <button type="button" onclick="removeOrderItem(' + index + ')">Remove</button></td>';
+return cells;
+}
+
+function renderOrderSheet() {
+const body = $('orderSheetBody');
+const empty = $('orderSheetEmpty');
+$('orderCount').textContent = String(orderSheetItems.length);
+body.innerHTML = '';
+if (orderSheetItems.length === 0) { empty.style.display = 'block'; return; }
+empty.style.display = 'none';
+orderSheetItems.forEach((item, index) => { const row = document.createElement('tr'); row.innerHTML = buildOrderRowCells(item, true, index); body.appendChild(row); });
+}
+
+function buildCopyText() {
+const c = getCurrentEntryData();
+const r = c.result;
+const lines = [];
+if (c.customerName) lines.push('Customer: ' + c.customerName);
+if (c.doorStyle) lines.push('Door Style: ' + c.doorStyle);
+if (c.species) lines.push('Species: ' + c.species);
+if (c.finishColor) lines.push('Finish / Color: ' + c.finishColor);
+if (c.identifier) lines.push('Identifier: ' + c.identifier);
+lines.push('Front Type: ' + r.frontTypeLabel);
+if (isMiscType(c.frontType)) { if (c.miscDescription) lines.push('Description: ' + c.miscDescription); if (c.miscAmount) lines.push('Amount Needed: ' + c.miscAmount); }
+else if (isPanelType(c.frontType)) { lines.push('Panel Width: ' + formatNumber(c.panelWidth)); lines.push('Panel Height: ' + formatNumber(c.panelHeight)); }
+else { lines.push('Split Rule: ' + c.doorSplitMode); lines.push('Opening: ' + formatNumber(c.openingWidth) + ' W x ' + formatNumber(c.openingHeight) + ' H'); lines.push('Top Overlay: ' + formatNumber(r.overlayConfig.top)); lines.push('Bottom Overlay: ' + formatNumber(r.overlayConfig.bottom)); lines.push('Left Overlay: ' + formatNumber(r.overlayConfig.left)); lines.push('Right Overlay: ' + formatNumber(r.overlayConfig.right)); }
+lines.push('Hinge Placement: ' + c.hingePlacement);
+lines.push('Width: ' + formatNumber(r.doorWidth));
+lines.push('Height: ' + formatNumber(r.doorHeight));
+lines.push('Quantity: ' + String(r.quantity));
+return lines.join('\n');
+}
+
+function buildCoverSheetText() { const c = getCurrentEntryData(); const lines = []; if (c.customerName) lines.push('Customer: ' + c.customerName); if (c.doorStyle) lines.push('Door Style: ' + c.doorStyle); if (c.species) lines.push('Species: ' + c.species); if (c.finishColor) lines.push('Finish / Color: ' + c.finishColor); return lines.join('\n'); }
+function buildOrderSheetText() { const lines = ['Order Sheet']; if (orderSheetItems.length === 0) { lines.push('No items added yet.'); return lines.join('\n'); } lines.push('Identifier | Front Type | Description | Width | Height | Qty / Amount | Hinge | Overlay'); orderSheetItems.forEach((item) => { const width = isMiscType(item.frontType) ? '' : formatNumber(item.result.doorWidth); const height = isMiscType(item.frontType) ? '' : formatNumber(item.result.doorHeight); const amount = isMiscType(item.frontType) ? (item.miscAmount || '') : String(item.result.quantity); lines.push([item.identifier, item.result.frontTypeLabel, item.miscDescription || '', width, height, amount, item.hingePlacement, getSelectedOverlayForOrder(item.hingePlacement, item.overlayConfig, item.result.isDouble, item.frontType)].join(' | ')); }); return lines.join('\n'); }
+
+function openCopyModal(title, message, text) { $('copyModalTitle').textContent = title; $('copyModalMessage').textContent = message; $('copyFallbackText').value = text; $('copyModal').classList.add('open'); $('copyFallbackText').focus(); $('copyFallbackText').select(); }
+function closeCopyModal() { $('copyModal').classList.remove('open'); }
+function selectFallbackText() { $('copyFallbackText').focus(); $('copyFallbackText').select(); }
+async function copyTextToClipboard(text, label) { try { const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', 'readonly'); ta.style.position = 'fixed'; ta.style.left = '-9999px'; document.body.appendChild(ta); ta.focus(); ta.select(); const ok = document.execCommand('copy'); document.body.removeChild(ta); if (ok) return {ok:true}; } catch (e) { console.error(e); } try { if (navigator.clipboard && navigator.clipboard.writeText) { await navigator.clipboard.writeText(text); return {ok:true}; } } catch (e) { console.error(e); } openCopyModal('Copy ' + label, 'Clipboard access is blocked in this browser tab. The ' + label + ' is ready below for manual copy.', text); return {ok:false}; }
+async function copyResults() { const r = await copyTextToClipboard(buildCopyText(), 'Results'); if (r.ok) alert('Results copied.'); }
+async function copyCoverSheet() { const r = await copyTextToClipboard(buildCoverSheetText(), 'Cover Sheet'); if (r.ok) alert('Cover sheet copied.'); }
+async function copyOrderSheet() { const r = await copyTextToClipboard(buildOrderSheetText(), 'Order Sheet'); if (r.ok) alert('Order sheet copied.'); }
+
+function printSheets() { const canvas = $('printCanvas'); renderPrintCanvas(); canvas.style.display = 'block'; void canvas.offsetHeight; window.print(); setTimeout(() => { canvas.style.display = 'none'; }, 500); }
+
+function assertEqual(actual, expected, label) { return (actual === expected ? 'PASS' : 'FAIL') + ' - ' + label + ' (expected ' + expected + ', got ' + actual + ')'; }
+function runTests() {
+const results = [];
+let test = getDoorCalculation('door', 20.49, 30, 0.125, 'none', {top:0.5,bottom:0.5,left:0.5,right:0.5}, 'auto', 0, 0, '', 'auto');
+results.push(assertEqual(test.isDouble, false, '20.49 opening stays single'));
+test = getDoorCalculation('door', 20.5, 30, 0.125, 'none', {top:0.5,bottom:0.5,left:0.5,right:0.5}, 'auto', 0, 0, '', 'auto');
+results.push(assertEqual(test.isDouble, true, '20.5 opening splits'));
+results.push(assertEqual(formatNumber(test.doorWidth), '10.6875', 'double width formula'));
+results.push(assertEqual(getSelectedOverlayForOrder('NB', {left:0.5,right:0.5}, true, 'door'), 'No Bore', 'double door can save NB'));
+test = getDoorCalculation('drawer', 30, 10, 0.125, 'none', {top:0.5,bottom:0.5,left:0.5,right:0.5}, 'auto', 0, 0, '', 'auto');
+results.push(assertEqual(test.isDouble, true, 'drawer auto width split works'));
+test = getDoorCalculation('drawer', 18, 20, 0.125, 'none', {top:0.5,bottom:0.5,left:0.5,right:0.5}, 'force_single', 0, 0, '', 'force_double');
+results.push(assertEqual(test.isHeightDouble, true, 'drawer height force double works'));
+results.push(assertEqual(test.quantity, 2, 'drawer height split quantity is 2'));
+results.push(assertEqual(formatNumber(test.doorHeight), '10.4375', 'drawer height split formula uses 1/4 gap'));
+test = getDoorCalculation('panel_1_4', 0, 0, 0, 'none', {top:0,bottom:0,left:0,right:0}, 'auto', 12, 24, '', 'auto');
+results.push(assertEqual(test.frontTypeLabel, '1/4 Panel', 'panel label'));
+test = getDoorCalculation('misc', 0, 0, 0, 'none', {top:0,bottom:0,left:0,right:0}, 'auto', 0, 0, '8 ft', 'auto');
+results.push(assertEqual(test.amountText, '8 ft', 'misc amount stored'));
+results.push(assertEqual(toFraction(0.6875), '11/16', '11/16 fraction'));
+results.push(assertEqual(overlayOptions.includes('4'), true, 'overlay options include 4 inches'));
+results.push(assertEqual(overlayOptions.includes('0.0625'), true, 'overlay options include 1/16'));
+results.push(assertEqual(typeof scheduleAutoSave, 'function', 'scheduleAutoSave exists'));
+results.push(assertEqual(typeof backupLibrary, 'function', 'backupLibrary exists'));
+results.push(assertEqual(typeof renderSavedJobsLibrary, 'function', 'library renderer exists'));
+$('testResults').textContent = results.join('\n');
+}
+
+function initializeTool() {
+const input = $('importFileInput');
+if (input) input.addEventListener('change', (event) => importLibraryFromFile(event.target.files && event.target.files[0]));
+populateAllOverlaySelects();
+syncAdvancedOverlayFields(0.5);
+renderSavedJobsLibrary();
+restoreAutoDraft();
+handleFrontTypeChange();
+calculate();
+renderOrderSheet();
+renderCoverSheet();
+renderPrintCanvas();
+runTests();
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeTool);
+else initializeTool();
+</script>
+
+
+</body></html>
