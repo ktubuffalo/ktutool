@@ -160,11 +160,7 @@ PASS - library renderer exists (expected function, got function)</div>
 <div class="result-panel"><div class="result-label">F: Front Height</div><div class="big" id="doorHeightDisplay">31</div><div class="sub">Finished height</div></div>
 <div class="summary" id="summaryText"><strong>Front type:</strong> Door<br><strong>Hinge placement:</strong> L<br><strong>Opening:</strong> 15 W x 30 H<br><strong>Width split rule:</strong> auto<br><strong>Overlays:</strong> Top 0.5, Bottom 0.5, Left 0.5, Right 0.5<br><strong>Result:</strong> Order 1 door at 16 W x 31 H.</div>
 <div class="mini-grid"><div class="mini-box"><div class="k">Front Type</div><div class="v" id="doorTypeDisplay">Door</div></div></div>
-<div class="action-row" style="margin-top: 10px;"><button class="primary" type="button" onclick="addCurrentToOrderSheet()">Add to Order Sheet</button>
-
-<button type="button" onclick="printSheets()">Print Cover + Order Sheets</button>
-
-<button type="button" onclick="copyResults()">Copy Results</button></div>
+<div class="action-row" style="margin-top: 10px;"><button class="primary" type="button" onclick="addCurrentToOrderSheet()">Add to Order Sheet</button><button type="button" onclick="printSheets()">Print Cover + Order Sheets</button><button type="button" onclick="copyResults()">Copy Results</button></div>
 <div class="order-sheet"><div class="sheet-header"><div><strong>Cover Sheet</strong></div><div class="order-actions"><button type="button" onclick="copyCoverSheet()">Copy Cover Sheet</button></div></div><div class="sheet-content" id="coverSheetDisplay">No cover sheet details entered yet.</div></div>
 <div class="order-sheet">
 <div class="order-sheet-header"><div><strong>Saved Jobs Library</strong> <span class="pill-count" id="savedJobCount">26</span><div id="autoSaveStatus" style="font-size:12px; color:var(--muted); margin-top:4px;">Auto-saved draft at 3:23:04 PM</div></div><div class="order-actions"><button type="button" onclick="saveCurrentJobToLibrary()">Save New Kitchen</button><button type="button" onclick="updateCurrentSavedJob()">Update Loaded Kitchen</button><button type="button" onclick="startNewKitchen()">Start New Kitchen</button><button type="button" onclick="exportSavedJobs()">Export Library</button><button type="button" onclick="backupLibrary()">Backup (Download)</button><button type="button" onclick="triggerImport()">Restore (Import)</button><input id="importFileInput" type="file" accept="application/json" style="display:none;"></div></div>
@@ -737,59 +733,7 @@ async function copyResults() { const r = await copyTextToClipboard(buildCopyText
 async function copyCoverSheet() { const r = await copyTextToClipboard(buildCoverSheetText(), 'Cover Sheet'); if (r.ok) alert('Cover sheet copied.'); }
 async function copyOrderSheet() { const r = await copyTextToClipboard(buildOrderSheetText(), 'Order Sheet'); if (r.ok) alert('Order sheet copied.'); }
 
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-
-function printSheets() {
-
-    const canvas = $('printCanvas');
-
-    renderPrintCanvas();
-
-    canvas.style.display = 'block';
-
-    setTimeout(() => {
-
-        try {
-
-            const imgData = canvas.toDataURL("image/png");
-
-            const { jsPDF } = window.jspdf;
-
-            const pdf = new jsPDF({
-                orientation: "portrait",
-                unit: "mm",
-                format: "letter"
-            });
-
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const imgHeight = (canvas.height * pageWidth) / canvas.width;
-
-            pdf.addImage(
-                imgData,
-                "PNG",
-                0,
-                0,
-                pageWidth,
-                imgHeight
-            );
-
-            pdf.save("Cabinet-Estimate.pdf");
-
-        } catch (error) {
-
-            console.error(error);
-            alert("PDF creation failed.");
-
-        }
-
-        canvas.style.display = 'none';
-
-    }, 500);
-}
+function printSheets() { const canvas = $('printCanvas'); renderPrintCanvas(); canvas.style.display = 'block'; void canvas.offsetHeight; window.print(); setTimeout(() => { canvas.style.display = 'none'; }, 500); }
 
 function assertEqual(actual, expected, label) { return (actual === expected ? 'PASS' : 'FAIL') + ' - ' + label + ' (expected ' + expected + ', got ' + actual + ')'; }
 function runTests() {
