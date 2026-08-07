@@ -71,23 +71,124 @@ th { background: #f9fafb; font-size: 12px; text-transform: uppercase; letter-spa
 .modal-card h3 { margin: 0 0 8px; font-size: 20px; }
 .modal-card p { margin: 0 0 12px; color: var(--muted); line-height: 1.5; font-size: 14px; }
 .copy-box { min-height: 240px; resize: vertical; font-size: 14px; line-height: 1.5; white-space: pre; }
+
+
+
+
+
+
 @media print {
-@page { margin: 0.35in; }
-html, body { margin: 0 !important; padding: 0 !important; background: white !important; height: auto !important; }
-.wrap, .modal-backdrop { display: none !important; }
-#printCanvas, #printCanvas * { visibility: visible !important; }
-#printCanvas { display: block !important; position: static !important; width: 100% !important; padding: 0 !important; margin: 0 !important; background: white !important; color: black !important; }
-.print-page { page-break-after: auto !important; break-after: auto !important; margin: 0 !important; padding: 0 !important; }
-.print-header { display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #f26a21; padding-bottom: 10px; margin-bottom: 14px; }
-.print-mark { width: 42px; height: 42px; background: #f26a21; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; border-radius: 6px; }
-.print-sub { font-size: 16px; font-weight: bold; color: #2f2f2f; }
-.print-title-main { font-size: 12px; color: #4b5563; margin-top: 2px; }
-.print-title { font-size: 20px; font-weight: bold; margin: 0 0 10px; }
-.print-meta { font-size: 13px; line-height: 1.4; margin-bottom: 14px; }
-.print-table { width: 100%; border-collapse: collapse; font-size: 11px; page-break-inside: auto; }
-.print-table tr { page-break-inside: avoid; break-inside: avoid; }
-.print-table th, .print-table td { border: 1px solid #000; padding: 5px; }
+
+@page { 
+    margin: 0.35in; 
 }
+
+html, body { 
+    margin: 0 !important; 
+    padding: 0 !important; 
+    background: white !important; 
+    height: auto !important;
+}
+
+body > * {
+    display: none !important;
+}
+
+#printCanvas {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: white !important;
+    color: black !important;
+}
+
+#printCanvas * {
+    visibility: visible !important;
+}
+
+.print-page {
+    page-break-after: auto !important;
+    break-after: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.print-header { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    border-bottom: 2px solid #f26a21; 
+    padding-bottom: 10px; 
+    margin-bottom: 14px; 
+}
+
+.print-mark { 
+    width: 42px; 
+    height: 42px; 
+    background: #f26a21; 
+    color: white; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-weight: 800; 
+    font-size: 15px; 
+    border-radius: 6px; 
+}
+
+.print-sub { 
+    font-size: 16px; 
+    font-weight: bold; 
+    color: #2f2f2f; 
+}
+
+.print-title-main { 
+    font-size: 12px; 
+    color: #4b5563; 
+    margin-top: 2px; 
+}
+
+.print-title { 
+    font-size: 20px; 
+    font-weight: bold; 
+    margin: 0 0 10px; 
+}
+
+.print-meta { 
+    font-size: 13px; 
+    line-height: 1.4; 
+    margin-bottom: 14px; 
+}
+
+.print-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    font-size: 11px; 
+    page-break-inside: auto; 
+}
+
+.print-table tr { 
+    page-break-inside: avoid; 
+    break-inside: avoid; 
+}
+
+.print-table th, 
+.print-table td { 
+    border: 1px solid #000; 
+    padding: 5px; 
+}
+
+}
+
+
+
+
+
+
+
+
 @media (max-width: 860px) { .layout, .grid, .advanced-grid, .mini-grid { grid-template-columns: 1fr; } h1 { font-size: 24px; } .big { font-size: 26px; } }
 </style>
 </head>
@@ -735,9 +836,7 @@ async function copyOrderSheet() { const r = await copyTextToClipboard(buildOrder
 
 
 
-
-
-async function printSheets() {
+function printSheets() {
 
     const canvas = $('printCanvas');
 
@@ -745,22 +844,16 @@ async function printSheets() {
 
     canvas.style.display = 'block';
 
-    // force browser to finish drawing
-    await new Promise(resolve => {
-        requestAnimationFrame(() => {
-            requestAnimationFrame(resolve);
-        });
-    });
-
-    window.print();
-
     setTimeout(() => {
-        canvas.style.display = 'none';
-    }, 1000);
+
+        window.print();
+
+        setTimeout(() => {
+            canvas.style.display = 'none';
+        }, 1000);
+
+    }, 300);
 }
-
-
-
 
 
 
