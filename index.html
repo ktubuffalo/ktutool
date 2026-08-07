@@ -737,7 +737,6 @@ async function copyOrderSheet() { const r = await copyTextToClipboard(buildOrder
 
 
 
-
 async function printSheets() {
 
     const canvas = $('printCanvas');
@@ -746,56 +745,18 @@ async function printSheets() {
 
     canvas.style.display = 'block';
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    try {
-
-        const rendered = await html2canvas(canvas, {
-            scale: 2,
-            useCORS: true,
-            backgroundColor: "#ffffff"
+    // force browser to finish drawing
+    await new Promise(resolve => {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(resolve);
         });
+    });
 
-        const imgData = rendered.toDataURL("image/png");
+    window.print();
 
-        const printWindow = window.open("", "_blank");
-
-        printWindow.document.write(`
-            <html>
-            <head>
-            <title>Cabinet Calculator</title>
-            <style>
-                body {
-                    margin:0;
-                    text-align:center;
-                }
-                img {
-                    width:100%;
-                    max-width:900px;
-                }
-            </style>
-            </head>
-            <body>
-                <img src="${imgData}">
-                <script>
-                    window.onload=function(){
-                        setTimeout(function(){
-                            window.print();
-                        },500);
-                    }
-                <\/script>
-            </body>
-            </html>
-        `);
-
-        printWindow.document.close();
-
-    } catch(err) {
-        console.error(err);
-        alert("Print failed");
-    }
-
-    canvas.style.display = 'none';
+    setTimeout(() => {
+        canvas.style.display = 'none';
+    }, 1000);
 }
 
 
