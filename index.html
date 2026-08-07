@@ -733,7 +733,28 @@ async function copyResults() { const r = await copyTextToClipboard(buildCopyText
 async function copyCoverSheet() { const r = await copyTextToClipboard(buildCoverSheetText(), 'Cover Sheet'); if (r.ok) alert('Cover sheet copied.'); }
 async function copyOrderSheet() { const r = await copyTextToClipboard(buildOrderSheetText(), 'Order Sheet'); if (r.ok) alert('Order sheet copied.'); }
 
-function printSheets() { const canvas = $('printCanvas'); renderPrintCanvas(); canvas.style.display = 'block'; void canvas.offsetHeight; window.print(); setTimeout(() => { canvas.style.display = 'none'; }, 500); }
+function printSheets() {
+    const canvas = $('printCanvas');
+
+    renderPrintCanvas();
+    canvas.style.display = 'block';
+
+    // Force the browser to render before printing
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            window.print();
+        });
+    });
+
+    // Hide after printing (desktop) or after a delay (mobile)
+    window.onafterprint = () => {
+        canvas.style.display = 'none';
+    };
+
+    setTimeout(() => {
+        canvas.style.display = 'none';
+    }, 5000);
+}
 
 function assertEqual(actual, expected, label) { return (actual === expected ? 'PASS' : 'FAIL') + ' - ' + label + ' (expected ' + expected + ', got ' + actual + ')'; }
 function runTests() {
