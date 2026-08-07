@@ -743,7 +743,7 @@ async function copyOrderSheet() { const r = await copyTextToClipboard(buildOrder
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 
-async function printSheets() {
+function printSheets() {
 
     const canvas = $('printCanvas');
 
@@ -751,74 +751,44 @@ async function printSheets() {
 
     canvas.style.display = 'block';
 
-    // Give the browser time to finish drawing
-    await new Promise(resolve => setTimeout(resolve, 500));
+    setTimeout(() => {
 
-    try {
+        try {
 
-        const rendered = await html2canvas(canvas, {
-            scale: 2,
-            useCORS: true,
-            backgroundColor: "#ffffff"
-        });
+            const imgData = canvas.toDataURL("image/png");
 
-        const imgData = rendered.toDataURL("image/png");
+            const { jsPDF } = window.jspdf;
 
-        const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "letter"
+            });
 
-        const pdf = new jsPDF({
-            orientation: "portrait",
-            unit: "mm",
-            format: "letter"
-        });
-
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = pageWidth;
-        const imgHeight = (rendered.height * imgWidth) / rendered.width;
-
-        let heightLeft = imgHeight;
-        let position = 0;
-
-        pdf.addImage(
-            imgData,
-            "PNG",
-            0,
-            position,
-            imgWidth,
-            imgHeight
-        );
-
-        heightLeft -= pageHeight;
-
-        while (heightLeft > 0) {
-            position = heightLeft - imgHeight;
-
-            pdf.addPage();
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const imgHeight = (canvas.height * pageWidth) / canvas.width;
 
             pdf.addImage(
                 imgData,
                 "PNG",
                 0,
-                position,
-                imgWidth,
+                0,
+                pageWidth,
                 imgHeight
             );
 
-            heightLeft -= pageHeight;
+            pdf.save("Cabinet-Estimate.pdf");
+
+        } catch (error) {
+
+            console.error(error);
+            alert("PDF creation failed.");
+
         }
 
-        pdf.save("Cabinet-Estimate.pdf");
+        canvas.style.display = 'none';
 
-    } catch (error) {
-
-        console.error("PDF export failed:", error);
-        alert("Unable to create PDF. Please try again.");
-
-    }
-
-    canvas.style.display = 'none';
+    }, 500);
 }
 
 function assertEqual(actual, expected, label) { return (actual === expected ? 'PASS' : 'FAIL') + ' - ' + label + ' (expected ' + expected + ', got ' + actual + ')'; }
