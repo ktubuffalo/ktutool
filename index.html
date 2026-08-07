@@ -733,7 +733,75 @@ async function copyResults() { const r = await copyTextToClipboard(buildCopyText
 async function copyCoverSheet() { const r = await copyTextToClipboard(buildCoverSheetText(), 'Cover Sheet'); if (r.ok) alert('Cover sheet copied.'); }
 async function copyOrderSheet() { const r = await copyTextToClipboard(buildOrderSheetText(), 'Order Sheet'); if (r.ok) alert('Order sheet copied.'); }
 
-function printSheets() { const canvas = $('printCanvas'); renderPrintCanvas(); canvas.style.display = 'block'; void canvas.offsetHeight; window.print(); setTimeout(() => { canvas.style.display = 'none'; }, 500); }
+
+
+
+
+
+async function printSheets() {
+
+    const canvas = $('printCanvas');
+
+    renderPrintCanvas();
+
+    canvas.style.display = 'block';
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    try {
+
+        const rendered = await html2canvas(canvas, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: "#ffffff"
+        });
+
+        const imgData = rendered.toDataURL("image/png");
+
+        const printWindow = window.open("", "_blank");
+
+        printWindow.document.write(`
+            <html>
+            <head>
+            <title>Cabinet Calculator</title>
+            <style>
+                body {
+                    margin:0;
+                    text-align:center;
+                }
+                img {
+                    width:100%;
+                    max-width:900px;
+                }
+            </style>
+            </head>
+            <body>
+                <img src="${imgData}">
+                <script>
+                    window.onload=function(){
+                        setTimeout(function(){
+                            window.print();
+                        },500);
+                    }
+                <\/script>
+            </body>
+            </html>
+        `);
+
+        printWindow.document.close();
+
+    } catch(err) {
+        console.error(err);
+        alert("Print failed");
+    }
+
+    canvas.style.display = 'none';
+}
+
+
+
+
+
 
 function assertEqual(actual, expected, label) { return (actual === expected ? 'PASS' : 'FAIL') + ' - ' + label + ' (expected ' + expected + ', got ' + actual + ')'; }
 function runTests() {
